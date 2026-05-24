@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>شركة الوفاء الدولية - إدارة الإنتاج وتوزيع الأجور</title>
+    <style>
+        :root {
+            --gold: #dbb960;
+            --gold-light: #f0dca0;
+            --gold-dark: #b8952f;
+            --dark: #1e1e1e;
+            --dark-light: #2d2d2d;
+            --dark-lighter: #3a3a3a;
+            --bg: #f7f6f2;
+            --card-bg: #fff;
+            --field-bg: #fafaf7;
+            --field-border: #e8e6df;
+            --text-secondary: #999;
+            --text-secondary2: #888;
+            --danger: #dc2626;
+            --gold-trans: rgba(219, 185, 96, 0.15);
+            --gold-border-trans: rgba(219, 185, 96, 0.45);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.18);
+            --radius-sm: 7px;
+            --radius: 10px;
+            --radius-md: 12px;
+            --radius-lg: 14px;
+            --font: 'Segoe UI', Tahoma, Arial, sans-serif;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+            display: block;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 100%;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            box-shadow: none;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            margin: 0 auto;
+        }
+
+        .app-header {
+            background: linear-gradient(180deg, #1e1e1e 0%, #2d2d2d 40%, #1e1e1e 100%);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent) 1;
+            flex-shrink: 0;
+        }
+        .header-logo-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            box-shadow: 0 0 10px rgba(219, 185, 96, 0.25);
+        }
+        .header-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .header-logo-wrap .logo-placeholder {
+            color: var(--gold);
+        }
+        .header-title {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .header-crown {
+            color: var(--gold);
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
+
+        .app-main {
+            flex: 1;
+            padding: 14px;
+            padding-bottom: 84px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .app-main.custom-scrollbar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .app-main.custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .app-main.custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 3px;
+        }
+        .app-main.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #dbb960;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            max-width: 100%;
+            background: linear-gradient(180deg, #1e1e1e 0%, #2d2d2d 30%, #1e1e1e 100%);
+            display: flex;
+            z-index: 40;
+            border-top: 1.5px solid rgba(219, 185, 96, 0.3);
+            flex-shrink: 0;
+        }
+        .bottom-nav .nav-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 4px 5px;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 10px;
+            font-family: var(--font);
+            transition: var(--transition);
+            position: relative;
+            gap: 2px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bottom-nav .nav-btn.active {
+            color: var(--gold);
+        }
+        .bottom-nav .nav-btn.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 2.5px;
+            background: var(--gold);
+            border-radius: 0 0 3px 3px;
+            box-shadow: 0 0 8px rgba(219, 185, 96, 0.6);
+        }
+        .bottom-nav .nav-btn .nav-icon-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .bottom-nav .nav-btn.active .nav-icon-wrap {
+            background: rgba(219, 185, 96, 0.12);
+        }
+        .bottom-nav .nav-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 12px;
+            animation: cardIn 0.3s ease forwards;
+            opacity: 0;
+            transform: translateY(6px);
+        }
+        .app-card:nth-child(1) { animation-delay: 0.02s; }
+        .app-card:nth-child(2) { animation-delay: 0.06s; }
+        .app-card:nth-child(3) { animation-delay: 0.10s; }
+        .app-card:nth-child(4) { animation-delay: 0.14s; }
+        .app-card:nth-child(5) { animation-delay: 0.18s; }
+        @keyframes cardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            color: #333;
+        }
+        .section-header .section-icon-box {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-sm);
+            background: var(--gold-trans);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-dark);
+            flex-shrink: 0;
+        }
+        .section-header .section-icon-box svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .field-group { margin-bottom: 10px; }
+        .field-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+        }
+        .field-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--field-border);
+            border-radius: var(--radius);
+            background: var(--field-bg);
+            font-size: 14px;
+            font-family: var(--font);
+            transition: var(--transition);
+            color: #333;
+            outline: none;
+        }
+        .field-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(219, 185, 96, 0.10);
+            background: #fff;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] { -moz-appearance: textfield; }
+        select.field-input {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            padding-left: 32px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 11px 16px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            color: var(--gold);
+            border: 1.5px solid var(--gold-border-trans);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-primary:hover { box-shadow: 0 4px 14px rgba(219, 185, 96, 0.25); }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary-muted {
+            opacity: 0.6;
+            color: rgba(219, 185, 96, 0.5);
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        .btn-primary-muted:hover { box-shadow: none; }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 14px;
+            background: #fff;
+            color: #444;
+            border: 1.5px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-secondary:hover { border-color: #bbb; background: #fafafa; }
+        .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 14px;
+            background: #fff;
+            color: var(--danger);
+            border: 1.5px solid #fecaca;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-danger:hover { background: #fef2f2; border-color: #fca5a5; }
+        .btn-icon-danger {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #f5f5f5;
+            color: #999;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .btn-icon-danger:hover { background: #fef2f2; color: var(--danger); }
+        .btn-icon-danger svg { width: 14px; height: 14px; }
+
+        .worker-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 13px;
+            border: 1.5px solid #ddd;
+            background: #fff;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: var(--font);
+            transition: var(--transition);
+            -webkit-tap-highlight-color: transparent;
+            margin: 3px;
+        }
+        .worker-chip-active {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            color: var(--gold);
+            border-color: var(--gold-dark);
+        }
+        .worker-chip .chip-check {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .worker-chip-active .chip-check {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: #1e1e1e;
+        }
+
+        .calc-preview {
+            background: linear-gradient(135deg, #2a2a2a 0%, #353535 100%);
+            color: #fff;
+            border: 1.5px solid var(--gold-border-trans);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-top: 8px;
+        }
+        .calc-preview .calc-label { color: #aaa; font-size: 10px; text-transform: uppercase; }
+        .calc-preview .calc-value { color: var(--gold-light); font-weight: 600; }
+
+        .total-display {
+            background: linear-gradient(135deg, rgba(219, 185, 96, 0.18) 0%, rgba(240, 220, 160, 0.22) 100%);
+            text-align: center;
+            padding: 14px;
+            border-radius: var(--radius);
+            margin-top: 10px;
+            border: 1px solid rgba(219, 185, 96, 0.25);
+        }
+        .total-display .total-amount { font-size: 26px; font-weight: 700; color: #333; }
+        .total-display .total-label { font-size: 11px; color: #888; text-transform: uppercase; }
+
+        .lock-screen {
+            position: fixed;
+            inset: 0;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            min-height: 100dvh;
+        }
+        .lock-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 28px 22px;
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            animation: lockCardIn 0.4s ease forwards;
+        }
+        @keyframes lockCardIn {
+            from { opacity: 0; transform: scale(0.9) translateY(16px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .lock-shake { animation: lockShake 0.5s ease; }
+        @keyframes lockShake {
+            0%,100%{ transform: translateX(0); }
+            15%{ transform: translateX(-8px); }
+            30%{ transform: translateX(8px); }
+            45%{ transform: translateX(-6px); }
+            60%{ transform: translateX(6px); }
+            75%{ transform: translateX(-3px); }
+            90%{ transform: translateX(3px); }
+        }
+        .lock-input {
+            width: 100%;
+            padding: 13px 16px;
+            letter-spacing: 2px;
+            border-radius: var(--radius-md);
+            border: 2px solid #e0ddd5;
+            font-size: 16px;
+            text-align: center;
+            font-family: var(--font);
+            outline: none;
+            transition: var(--transition);
+        }
+        .lock-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(219, 185, 96, 0.08);
+        }
+        .lock-icon { color: var(--gold-dark); margin-bottom: 10px; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 22px 18px;
+            width: 88%;
+            max-width: 380px;
+            box-shadow: var(--shadow-lg);
+            animation: modalSlide 0.3s ease;
+        }
+        @keyframes modalSlide {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-title { font-weight: 700; font-size: 16px; margin-bottom: 10px; color: #333; text-align: center; }
+        .modal-body { font-size: 14px; color: #555; text-align: center; margin-bottom: 16px; line-height: 1.6; }
+        .modal-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .modal-actions button {
+            min-width: 80px;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font);
+            border: 1.5px solid #ddd;
+            background: #fff;
+            transition: var(--transition);
+        }
+        .modal-actions .modal-btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+        .modal-actions .modal-btn-primary { background: #2a2a2a; color: var(--gold); border-color: var(--gold-border-trans); }
+
+        .success-banner {
+            background: #dcfce7;
+            color: #166534;
+            padding: 11px 14px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            animation: slideDown 0.35s ease forwards;
+            border: 1px solid #bbf7d0;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-16px); max-height: 0; }
+            to { opacity: 1; transform: translateY(0); max-height: 60px; }
+        }
+
+        .hours-section {
+            background: #fafaf7;
+            border-radius: var(--radius);
+            padding: 10px 12px;
+            margin-top: 6px;
+        }
+        .worker-hours-input {
+            width: 80px;
+            min-width: 60px;
+            text-align: center;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--field-border);
+            padding: 6px 8px;
+            font-size: 14px;
+            font-family: var(--font);
+            background: #fff;
+            outline: none;
+            transition: var(--transition);
+        }
+        .worker-hours-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(219, 185, 96, 0.08);
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .invoice-table thead { background: #2a2a2a; color: var(--gold); }
+        .invoice-table thead th { padding: 8px 6px; font-weight: 600; text-align: center; font-size: 11px; }
+        .invoice-table tbody td { padding: 7px 6px; text-align: center; border-bottom: 1px solid #f0efe8; }
+        .invoice-table tbody tr:nth-child(even) { background: #fafaf7; }
+        .invoice-table tbody tr:nth-child(odd) { background: #fff; }
+
+        .report-tabs {
+            display: flex;
+            background: #fff;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 12px;
+            border: 1.5px solid #e8e6df;
+        }
+        .report-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            font-family: var(--font);
+            transition: var(--transition);
+            border: none;
+            background: #fff;
+            color: #666;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .report-tab.active { background: #2a2a2a; color: var(--gold); }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #fafaf7;
+            border: 1px solid #f0efe8;
+            border-radius: var(--radius);
+            margin-bottom: 6px;
+            gap: 8px;
+            font-size: 13px;
+        }
+        .record-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #fafaf7;
+            border: 1px solid #f0efe8;
+            border-radius: var(--radius);
+            margin-bottom: 5px;
+            gap: 8px;
+            font-size: 13px;
+            flex-wrap: wrap;
+        }
+
+        .archive-item {
+            background: #fff;
+            border: 1px solid #e8e6df;
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .archive-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .archive-details {
+            padding: 0 14px 14px;
+            display: none;
+            animation: archiveExpand 0.3s ease;
+        }
+        .archive-details.open { display: block; }
+        @keyframes archiveExpand {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 800px; }
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 120;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            pointer-events: none;
+            width: 90%;
+            max-width: 400px;
+        }
+        .toast {
+            background: #333;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            text-align: center;
+            animation: toastIn 0.3s ease forwards;
+            pointer-events: auto;
+            box-shadow: var(--shadow-md);
+            font-family: var(--font);
+        }
+        .toast.warning { background: #fef3c7; color: #92400e; }
+        .toast.error { background: #fef2f2; color: #991b1b; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .text-secondary { color: #888; font-size: 11px; }
+        .text-gold { color: var(--gold-dark); }
+        .fw-bold { font-weight: 700; }
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mt-2 { margin-top: 8px; }
+        .gap-2 { gap: 8px; }
+        .flex-wrap { flex-wrap: wrap; }
+        .d-flex { display: flex; }
+        .align-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .w-full { width: 100%; }
+        .text-center { text-align: center; }
+        .no-print {}
+
+        @media print {
+            .app-header, .bottom-nav, .no-print { display: none !important; }
+            .app-shell { max-width: 100%; box-shadow: none; }
+            .app-main { padding-bottom: 0; }
+            .modal-overlay { display: none !important; }
+            .toast-container { display: none !important; }
+            body { background: #fff; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- LOCK SCREEN -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-card" id="lockCard">
+            <div class="lock-icon" id="lockIconSvg"></div>
+            <h3 style="margin-bottom:6px;color:#333;" id="lockTitle">قفل الأمان</h3>
+            <p style="font-size:12px;color:#888;margin-bottom:14px;" id="lockSubtitle">أدخل كلمة المرور للمتابعة</p>
+            <input type="password" class="lock-input" id="lockPasswordInput" placeholder="••••••" maxlength="20" autocomplete="off">
+            <div style="margin-top:4px;display:flex;gap:8px;justify-content:center;" id="lockConfirmGroup" hidden>
+                <input type="password" class="lock-input" id="lockConfirmInput" placeholder="تأكيد كلمة المرور" maxlength="20" autocomplete="off" style="margin-top:6px;">
+            </div>
+            <button class="btn-primary" style="margin-top:12px;" id="lockSubmitBtn">دخول</button>
+            <button class="btn-secondary" style="margin-top:6px;display:none;" id="lockToggleEyeBtn">
+                <span id="lockEyeIcon">👁️</span> إظهار
+            </button>
+            <p style="font-size:10px;color:#ccc;margin-top:8px;" id="lockError" hidden>كلمة المرور غير صحيحة</p>
+        </div>
+    </div>
+
+    <!-- APP SHELL -->
+    <div class="app-shell" id="appShell" style="display:none;">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="header-logo-wrap">
+                <img src="logo.png" alt="شعار" onerror="this.style.display='none';this.parentElement.querySelector('.logo-placeholder').style.display='flex';" style="display:block;">
+                <div class="logo-placeholder" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 12h14l3-12H2z"/><circle cx="12" cy="20" r="2"/><path d="M9 20h6"/></svg>
+                </div>
+            </div>
+            <span class="header-title">شركة الوفاء الدولية</span>
+            <span class="header-crown">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2 6l3 10h14l3-10-5 4-5-8-5 8-5-4z"/></svg>
+            </span>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main custom-scrollbar" id="appMain"></main>
+
+        <!-- BOTTOM NAV -->
+        <nav class="bottom-nav" id="bottomNav">
+            <button class="nav-btn" data-tab="settings">
+                <span class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83"/></svg></span>
+                <span>الإعدادات</span>
+            </button>
+            <button class="nav-btn active" data-tab="production">
+                <span class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M5 20V8l7-5 7 5v12"/><rect x="8" y="12" width="3" height="8"/><rect x="13" y="10" width="3" height="10"/></svg></span>
+                <span>الإنتاج</span>
+            </button>
+            <button class="nav-btn" data-tab="reports">
+                <span class="nav-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span>
+                <span>التقارير</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none;">
+        <div class="modal-card" id="modalCard"></div>
+    </div>
+
+    <script>
+        (function() {
+            // ==================== SVG ICONS ====================
+            const icons = {
+                gear: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83"/></svg>',
+                factory: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M5 20V8l7-5 7 5v12"/><rect x="8" y="12" width="3" height="8"/><rect x="13" y="10" width="3" height="10"/></svg>',
+                document: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>',
+                plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+                trash: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><rect x="10" y="11" width="4" height="8"/></svg>',
+                checkCircle: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>',
+                warning: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>',
+                printer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="10"/><path d="M6 2h12v4H6zM6 16H4a2 2 0 01-2-2v-4a2 2 0 012-2h16a2 2 0 012 2v4a2 2 0 01-2 2h-2"/></svg>',
+                reset: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.5 15a9 9 0 102.1-8.3L1 10"/></svg>',
+                users: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M1 21v-2a4 4 0 014-4h8a4 4 0 014 4v2"/><circle cx="17" cy="9" r="3"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>',
+                box: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
+                arrowDown: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>',
+                selectAll: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12l3 3 5-5"/></svg>',
+                crown: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2 6l3 10h14l3-10-5 4-5-8-5 8-5-4z"/></svg>',
+                lock: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>',
+                unlock: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 019.9-1"/></svg>',
+                shield: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V6l8-4z"/></svg>',
+                eye: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/></svg>',
+                eyeOff: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10 10 0 011 12s4-7 11-7a10 10 0 016.94 2.94M7 7l10 10"/><circle cx="12" cy="12" r="3"/></svg>',
+                archive: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="5" rx="1"/><path d="M4 9v9a2 2 0 002 2h12a2 2 0 002-2V9"/><line x1="10" y1="13" x2="14" y2="13"/></svg>',
+                book: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',
+                clock: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>',
+            };
+
+            // ==================== STATE ====================
+            const GoodType = { PIECE: 'قطعة', AREA: 'مساحة', VOLUME: 'حجم' };
+            const defaultGoods = [
+                { id: 'default-1', name: 'بلاط 30×40 سم', type: 'مساحة', length: 30, width: 40, height: 0, price: 12 },
+                { id: 'default-2', name: 'اصفر20×20×40 سم', type: 'حجم', length: 20, width: 20, height: 40, price: 110 },
+                { id: 'default-3', name: 'ابيض', type: 'قطعة', length: 0, width: 0, height: 0, price: 5 },
+            ];
+            const defaultWorkers = [
+                { id: 'worker-1', name: 'أحمد' },
+                { id: 'worker-2', name: 'خالد' },
+                { id: 'worker-3', name: 'سالم' },
+            ];
+            const defaultHours = 8;
+
+            let state = {
+                goods: JSON.parse(JSON.stringify(defaultGoods)),
+                workers: JSON.parse(JSON.stringify(defaultWorkers)),
+                records: [],
+                archivedInvoices: [],
+                password: '',
+                defaultHours: defaultHours,
+            };
+
+            function simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                    hash = hash & hash;
+                }
+                return 'h_' + Math.abs(hash).toString(36);
+            }
+
+            function saveState() {
+                localStorage.setItem('al-wefaq-storage', JSON.stringify(state));
+            }
+
+            function loadState() {
+                const s = localStorage.getItem('al-wefaq-storage');
+                if (s) {
+                    try {
+                        const parsed = JSON.parse(s);
+                        state.goods = parsed.goods || JSON.parse(JSON.stringify(defaultGoods));
+                        state.workers = parsed.workers || JSON.parse(JSON.stringify(defaultWorkers));
+                        state.records = parsed.records || [];
+                        state.archivedInvoices = parsed.archivedInvoices || [];
+                        state.password = parsed.password || '';
+                        state.defaultHours = parsed.defaultHours || defaultHours;
+                    } catch (e) {
+                        resetState();
+                    }
+                } else {
+                    resetState();
+                }
+            }
+
+            function resetState() {
+                state.goods = JSON.parse(JSON.stringify(defaultGoods));
+                state.workers = JSON.parse(JSON.stringify(defaultWorkers));
+                state.records = [];
+                state.archivedInvoices = [];
+                state.password = '';
+                state.defaultHours = defaultHours;
+                saveState();
+            }
+
+            function generateId() {
+                return Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+            }
+
+            // ==================== CALC HELPERS ====================
+            function calculateTotal(good, quantity) {
+                const lm = good.length / 100, wm = good.width / 100, hm = good.height / 100;
+                switch (good.type) {
+                    case 'قطعة': return quantity * good.price;
+                    case 'مساحة': return lm * wm * quantity * good.price;
+                    case 'حجم': return lm * wm * hm * quantity * good.price;
+                    default: return 0;
+                }
+            }
+
+            function getCalcDescription(good, quantity) {
+                const lm = good.length / 100, wm = good.width / 100, hm = good.height / 100;
+                const total = calculateTotal(good, quantity).toFixed(2);
+                switch (good.type) {
+                    case 'قطعة': return `${quantity} قطعة × ${good.price} $ = ${total} $`;
+                    case 'مساحة': return `(${lm}م × ${wm}م) × ${quantity} قطعة × ${good.price} $/م² = ${total} $`;
+                    case 'حجم': return `(${lm}م × ${wm}م × ${hm}م) × ${quantity} قطعة × ${good.price} $/م³ = ${total} $`;
+                    default: return '';
+                }
+            }
+
+            function formatPrice(amount) {
+                const fixed2 = amount.toFixed(2);
+                const fixed4 = amount.toFixed(4);
+                return parseFloat(fixed4) !== parseFloat(fixed2) ? fixed4 : fixed2;
+            }
+
+            function calcUnitQuantity(type, length, width, height, quantity) {
+                switch (type) {
+                    case 'قطعة': return quantity;
+                    case 'مساحة': return (length / 100) * (width / 100) * quantity;
+                    case 'حجم': return (length / 100) * (width / 100) * (height / 100) * quantity;
+                    default: return quantity;
+                }
+            }
+
+            function formatUnitQuantity(type, length, width, height, quantity) {
+                const uq = calcUnitQuantity(type, length, width, height, quantity);
+                switch (type) {
+                    case 'قطعة': return `${quantity} قطعة`;
+                    case 'مساحة': return `${uq.toFixed(2)} م²`;
+                    case 'حجم': return `${uq.toFixed(4)} م³`;
+                    default: return `${quantity}`;
+                }
+            }
+
+            function getToday() {
+                return new Date().toISOString().split('T')[0];
+            }
+
+            function formatDateArabic(dateStr) {
+                const d = new Date(dateStr + 'T00:00:00');
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                return d.toLocaleDateString('ar-SA', options);
+            }
+
+            // ==================== TOAST SYSTEM ====================
+            function showToast(msg, type = '') {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = 'toast ' + (type || '');
+                toast.textContent = msg;
+                container.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2800);
+            }
+
+            // ==================== MODAL SYSTEM ====================
+            function showModal(title, body, actions) {
+                const overlay = document.getElementById('modalOverlay');
+                const card = document.getElementById('modalCard');
+                let actionsHTML = '<div class="modal-actions">';
+                actions.forEach(a => {
+                    const cls = a.danger ? 'modal-btn-danger' : (a.primary ? 'modal-btn-primary' : '');
+                    actionsHTML += `<button class="${cls}" data-action="${a.key}" style="${a.style||''}">${a.label}</button>`;
+                });
+                actionsHTML += '</div>';
+                card.innerHTML = `
+                    <div class="modal-title">${title}</div>
+                    <div class="modal-body">${body}</div>
+                    ${actionsHTML}
+                `;
+                overlay.style.display = 'flex';
+                card.querySelectorAll('[data-action]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const key = this.getAttribute('data-action');
+                        const action = actions.find(a => a.key === key);
+                        if (action && action.callback) action.callback();
+                        if (action && action.close !== false) overlay.style.display = 'none';
+                    });
+                });
+                overlay.onclick = function(e) {
+                    if (e.target === overlay) overlay.style.display = 'none';
+                };
+            }
+
+            function hideModal() {
+                document.getElementById('modalOverlay').style.display = 'none';
+            }
+
+            // ==================== LOCK SCREEN ====================
+            let lockMode = 'enter';
+            let showPassword = false;
+
+            function updateLockScreen() {
+                const hasPassword = !!state.password;
+                const lockScreen = document.getElementById('lockScreen');
+                const lockTitle = document.getElementById('lockTitle');
+                const lockSubtitle = document.getElementById('lockSubtitle');
+                const lockSubmitBtn = document.getElementById('lockSubmitBtn');
+                const lockConfirmGroup = document.getElementById('lockConfirmGroup');
+                const lockError = document.getElementById('lockError');
+                const lockPasswordInput = document.getElementById('lockPasswordInput');
+                const lockConfirmInput = document.getElementById('lockConfirmInput');
+                const lockToggleEyeBtn = document.getElementById('lockToggleEyeBtn');
+                const lockIconSvg = document.getElementById('lockIconSvg');
+                const appShell = document.getElementById('appShell');
+
+                if (!hasPassword) {
+                    lockMode = 'set';
+                    lockTitle.textContent = 'تعيين كلمة المرور';
+                    lockSubtitle.textContent = 'أنشئ كلمة مرور جديدة (4 أحرف على الأقل)';
+                    lockSubmitBtn.textContent = 'تعيين';
+                    lockConfirmGroup.hidden = false;
+                    lockIconSvg.innerHTML = icons.lock;
+                } else if (lockMode === 'enter') {
+                    lockTitle.textContent = 'قفل الأمان';
+                    lockSubtitle.textContent = 'أدخل كلمة المرور للمتابعة';
+                    lockSubmitBtn.textContent = 'دخول';
+                    lockConfirmGroup.hidden = true;
+                    lockIconSvg.innerHTML = icons.lock;
+                } else if (lockMode === 'change') {
+                    lockTitle.textContent = 'تغيير كلمة المرور';
+                    lockSubtitle.textContent = 'أدخل كلمة المرور الحالية ثم الجديدة';
+                    lockSubmitBtn.textContent = 'تغيير';
+                    lockConfirmGroup.hidden = false;
+                    lockIconSvg.innerHTML = icons.lock;
+                }
+                lockError.hidden = true;
+                lockPasswordInput.value = '';
+                lockConfirmInput.value = '';
+                lockPasswordInput.type = showPassword ? 'text' : 'password';
+                lockConfirmInput.type = showPassword ? 'text' : 'password';
+                lockToggleEyeBtn.innerHTML = (showPassword ? icons.eyeOff : icons.eye) + ' ' + (showPassword ? 'إخفاء' : 'إظهار');
+                lockToggleEyeBtn.style.display = 'inline-flex';
+                lockScreen.style.display = 'flex';
+                appShell.style.display = 'none';
+                lockPasswordInput.focus();
+            }
+
+            function handleLockSubmit() {
+                const lockPasswordInput = document.getElementById('lockPasswordInput');
+                const lockConfirmInput = document.getElementById('lockConfirmInput');
+                const lockError = document.getElementById('lockError');
+                const lockCard = document.getElementById('lockCard');
+                const pw = lockPasswordInput.value.trim();
+                const cpw = lockConfirmInput.value.trim();
+
+                lockError.hidden = true;
+
+                if (lockMode === 'set') {
+                    if (pw.length < 4) {
+                        lockError.textContent = 'كلمة المرور يجب أن تكون 4 أحرف على الأقل';
+                        lockError.hidden = false;
+                        shakeLock();
+                        return;
+                    }
+                    if (pw !== cpw) {
+                        lockError.textContent = 'كلمتا المرور غير متطابقتين';
+                        lockError.hidden = false;
+                        shakeLock();
+                        return;
+                    }
+                    state.password = simpleHash(pw);
+                    saveState();
+                    lockMode = 'enter';
+                    showToast('✅ تم تعيين كلمة المرور بنجاح');
+                    unlockApp();
+                } else if (lockMode === 'enter') {
+                    if (simpleHash(pw) !== state.password) {
+                        lockError.textContent = 'كلمة المرور غير صحيحة';
+                        lockError.hidden = false;
+                        shakeLock();
+                        return;
+                    }
+                    unlockApp();
+                } else if (lockMode === 'change') {
+                    if (simpleHash(pw) !== state.password) {
+                        lockError.textContent = 'كلمة المرور الحالية غير صحيحة';
+                        lockError.hidden = false;
+                        shakeLock();
+                        return;
+                    }
+                    if (cpw.length < 4) {
+                        lockError.textContent = 'كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل';
+                        lockError.hidden = false;
+                        shakeLock();
+                        return;
+                    }
+                    state.password = simpleHash(cpw);
+                    saveState();
+                    lockMode = 'enter';
+                    showToast('✅ تم تغيير كلمة المرور بنجاح');
+                    unlockApp();
+                }
+            }
+
+            function shakeLock() {
+                const lockCard = document.getElementById('lockCard');
+                lockCard.classList.remove('lock-shake');
+                void lockCard.offsetWidth;
+                lockCard.classList.add('lock-shake');
+                setTimeout(() => lockCard.classList.remove('lock-shake'), 500);
+            }
+
+            function unlockApp() {
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('appShell').style.display = 'flex';
+                lockMode = 'enter';
+                currentTab = 'production';
+                updateNavActive();
+                renderContent();
+            }
+
+            // ==================== NAVIGATION ====================
+            let currentTab = 'production';
+            let reportSubTab = 'invoices';
+            let expandedArchives = {};
+
+            function updateNavActive() {
+                document.querySelectorAll('.bottom-nav .nav-btn').forEach(b => {
+                    b.classList.toggle('active', b.getAttribute('data-tab') === currentTab);
+                });
+            }
+
+            // ==================== RENDER ====================
+            function renderContent() {
+                const main = document.getElementById('appMain');
+                main.style.animation = 'none';
+                main.offsetHeight;
+                main.style.animation = 'pageIn 0.25s ease';
+                switch (currentTab) {
+                    case 'settings': renderSettings(main); break;
+                    case 'production': renderProduction(main); break;
+                    case 'reports': renderReports(main); break;
+                }
+            }
+
+            const pageInStyle = document.createElement('style');
+            pageInStyle.textContent = '@keyframes pageIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}';
+            document.head.appendChild(pageInStyle);
+
+            // ==================== RENDER SETTINGS (NO DEFAULT VALUES IN FIELDS) ====================
+            function renderSettings(main) {
+                main.innerHTML = `
+                    <div class="app-card">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.box}</span>
+                            <span>إدارة البضائع</span>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">اسم البضاعة</label>
+                            <input type="text" class="field-input" id="goodNameInput" placeholder="مثال: بلاط 40×40 سم">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">نوع البضاعة</label>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;" id="goodTypeBtns">
+                                <button class="worker-chip worker-chip-active" data-type="قطعة">قطعة</button>
+                                <button class="worker-chip" data-type="مساحة">مساحة</button>
+                                <button class="worker-chip" data-type="حجم">حجم</button>
+                            </div>
+                        </div>
+                        <div id="goodDimsContainer" style="display:none;">
+                            <div class="field-group" id="dimLengthGroup" hidden>
+                                <label class="field-label">الطول (سم)</label>
+                                <input type="number" class="field-input" id="goodLength" placeholder="0" min="0" step="0.1">
+                            </div>
+                            <div class="field-group" id="dimWidthGroup" hidden>
+                                <label class="field-label">العرض (سم)</label>
+                                <input type="number" class="field-input" id="goodWidth" placeholder="0" min="0" step="0.1">
+                            </div>
+                            <div class="field-group" id="dimHeightGroup" hidden>
+                                <label class="field-label">الارتفاع (سم)</label>
+                                <input type="number" class="field-input" id="goodHeight" placeholder="0" min="0" step="0.1">
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">السعر ($)</label>
+                            <input type="number" class="field-input" id="goodPrice" placeholder="0.00" min="0.01" step="0.01">
+                        </div>
+                        <button class="btn-primary btn-primary-muted" id="addGoodBtn">
+                            ${icons.plus} إضافة بضاعة
+                        </button>
+                        <div id="goodsList" class="mt-2"></div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.users}</span>
+                            <span>إدارة العمال</span>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">الساعات الافتراضية / يوم</label>
+                            <input type="number" class="field-input" id="defaultHoursInput" placeholder="${state.defaultHours}" min="0.5" max="24" step="0.5">
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">اسم العامل</label>
+                            <div style="display:flex;gap:6px;">
+                                <input type="text" class="field-input" id="workerNameInput" placeholder="اسم العامل" style="flex:1;">
+                                <button class="btn-primary" id="addWorkerBtn" style="width:auto;padding:10px 16px;white-space:nowrap;">
+                                    ${icons.plus} إضافة
+                                </button>
+                            </div>
+                        </div>
+                        <div id="workersList" class="mt-2"></div>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.shield}</span>
+                            <span>إدارة كلمة المرور</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:${state.password?'#22c55e':'#ccc'};display:inline-block;"></span>
+                            <span style="font-size:13px;color:#555;">${state.password?'كلمة المرور مفعلة':'كلمة المرور غير مفعلة'}</span>
+                        </div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="passwordActions"></div>
+                        <div id="passwordChangeForm" style="display:none;margin-top:10px;"></div>
+                    </div>
+                `;
+
+                let selectedGoodType = 'قطعة';
+                const goodTypeBtns = document.getElementById('goodTypeBtns');
+                const goodDimsContainer = document.getElementById('goodDimsContainer');
+                const dimLengthGroup = document.getElementById('dimLengthGroup');
+                const dimWidthGroup = document.getElementById('dimWidthGroup');
+                const dimHeightGroup = document.getElementById('dimHeightGroup');
+                const goodLength = document.getElementById('goodLength');
+                const goodWidth = document.getElementById('goodWidth');
+                const goodHeight = document.getElementById('goodHeight');
+                const goodPrice = document.getElementById('goodPrice');
+                const goodNameInput = document.getElementById('goodNameInput');
+                const addGoodBtn = document.getElementById('addGoodBtn');
+
+                function updateGoodTypeUI() {
+                    goodTypeBtns.querySelectorAll('button').forEach(b => {
+                        b.classList.toggle('worker-chip-active', b.getAttribute('data-type') === selectedGoodType);
+                    });
+                    goodDimsContainer.style.display = selectedGoodType === 'قطعة' ? 'none' : 'block';
+                    dimLengthGroup.hidden = (selectedGoodType === 'قطعة');
+                    dimWidthGroup.hidden = (selectedGoodType === 'قطعة');
+                    dimHeightGroup.hidden = (selectedGoodType !== 'حجم');
+                    checkAddGoodValid();
+                }
+
+                goodTypeBtns.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('worker-chip') || e.target.closest('.worker-chip')) {
+                        const btn = e.target.closest('.worker-chip');
+                        selectedGoodType = btn.getAttribute('data-type');
+                        updateGoodTypeUI();
+                    }
+                });
+
+                function getGoodFormData() {
+                    return {
+                        name: goodNameInput.value.trim(),
+                        type: selectedGoodType,
+                        length: parseFloat(goodLength.value) || 0,
+                        width: parseFloat(goodWidth.value) || 0,
+                        height: parseFloat(goodHeight.value) || 0,
+                        price: parseFloat(goodPrice.value)
+                    };
+                }
+
+                function checkAddGoodValid() {
+                    const d = getGoodFormData();
+                    let valid = d.name.length > 0 && d.price > 0;
+                    if (d.type === 'مساحة') valid = valid && d.length > 0 && d.width > 0;
+                    if (d.type === 'حجم') valid = valid && d.length > 0 && d.width > 0 && d.height > 0;
+                    addGoodBtn.classList.toggle('btn-primary-muted', !valid);
+                }
+
+                [goodNameInput, goodPrice, goodLength, goodWidth, goodHeight].forEach(el => {
+                    if (el) el.addEventListener('input', checkAddGoodValid);
+                });
+                updateGoodTypeUI();
+
+                addGoodBtn.addEventListener('click', function() {
+                    if (addGoodBtn.classList.contains('btn-primary-muted')) return;
+                    const d = getGoodFormData();
+                    const newGood = {
+                        id: generateId(),
+                        name: d.name,
+                        type: d.type,
+                        length: d.length,
+                        width: d.width,
+                        height: d.height,
+                        price: d.price,
+                    };
+                    state.goods.push(newGood);
+                    saveState();
+                    showToast('✅ تمت إضافة البضاعة بنجاح');
+                    renderSettings(main);
+                });
+
+                renderGoodsList();
+                renderWorkersList();
+                const defaultHoursInput = document.getElementById('defaultHoursInput');
+                defaultHoursInput.addEventListener('change', function() {
+                    const v = parseFloat(this.value);
+                    if (v > 0 && v <= 24) {
+                        state.defaultHours = v;
+                        saveState();
+                        showToast('تم تحديث الساعات الافتراضية');
+                    }
+                });
+                document.getElementById('addWorkerBtn').addEventListener('click', function() {
+                    const nameInput = document.getElementById('workerNameInput');
+                    const name = nameInput.value.trim();
+                    if (!name) { showToast('الرجاء إدخال اسم العامل', 'warning'); return; }
+                    state.workers.push({ id: generateId(), name });
+                    saveState();
+                    nameInput.value = '';
+                    showToast('✅ تمت إضافة العامل');
+                    renderSettings(main);
+                });
+                renderPasswordActions();
+            }
+
+            function renderGoodsList() {
+                const container = document.getElementById('goodsList');
+                if (!container) return;
+                if (state.goods.length === 0) {
+                    container.innerHTML = '<p class="text-secondary text-center">لا توجد بضائع</p>';
+                    return;
+                }
+                container.innerHTML = state.goods.map((g, i) => {
+                    let dimsText = '';
+                    if (g.type === 'مساحة') dimsText = ` | ${g.length}×${g.width} سم`;
+                    if (g.type === 'حجم') dimsText = ` | ${g.length}×${g.width}×${g.height} سم`;
+                    return `
+                        <div class="list-item">
+                            <div style="flex:1;min-width:0;">
+                                <span style="font-weight:600;">${escHtml(g.name)}</span>
+                                <span class="text-secondary">[${g.type}${dimsText}] - ${g.price} $</span>
+                            </div>
+                            <button class="btn-icon-danger" data-delete-good="${g.id}" title="حذف">
+                                ${icons.trash}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+                container.querySelectorAll('[data-delete-good]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const gid = this.getAttribute('data-delete-good');
+                        if (state.goods.length <= 1) {
+                            showToast('لا يمكن حذف آخر بضاعة', 'warning');
+                            return;
+                        }
+                        const good = state.goods.find(g => g.id === gid);
+                        showModal('تأكيد الحذف', `هل أنت متأكد من حذف البضاعة "<strong>${escHtml(good?good.name:'')}</strong>"؟`, [
+                            { key: 'cancel', label: 'إلغاء', close: true },
+                            { key: 'delete', label: 'حذف', danger: true, callback: () => {
+                                state.goods = state.goods.filter(g => g.id !== gid);
+                                saveState();
+                                showToast('🗑️ تم حذف البضاعة');
+                                renderSettings(document.getElementById('appMain'));
+                            }},
+                        ]);
+                    });
+                });
+            }
+
+            function renderWorkersList() {
+                const container = document.getElementById('workersList');
+                if (!container) return;
+                if (state.workers.length === 0) {
+                    container.innerHTML = '<p class="text-secondary text-center">لا يوجد عمال</p>';
+                    return;
+                }
+                const colors = ['#dbb960', '#b8952f', '#8b7a3a', '#c9a84c', '#a08030'];
+                container.innerHTML = state.workers.map((w, i) => {
+                    const initial = w.name.charAt(0);
+                    const bgColor = colors[i % colors.length];
+                    return `
+                        <div class="list-item">
+                            <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+                                <span style="width:28px;height:28px;border-radius:50%;background:${bgColor};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">${initial}</span>
+                                <span style="font-weight:600;">${escHtml(w.name)}</span>
+                            </div>
+                            <button class="btn-icon-danger" data-delete-worker="${w.id}" title="حذف">
+                                ${icons.trash}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+                container.querySelectorAll('[data-delete-worker]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const wid = this.getAttribute('data-delete-worker');
+                        if (state.workers.length <= 1) {
+                            showToast('لا يمكن حذف آخر عامل', 'warning');
+                            return;
+                        }
+                        const worker = state.workers.find(w => w.id === wid);
+                        showModal('تأكيد الحذف', `هل أنت متأكد من حذف العامل "<strong>${escHtml(worker?worker.name:'')}</strong>"؟`, [
+                            { key: 'cancel', label: 'إلغاء', close: true },
+                            { key: 'delete', label: 'حذف', danger: true, callback: () => {
+                                state.workers = state.workers.filter(w => w.id !== wid);
+                                saveState();
+                                showToast('🗑️ تم حذف العامل');
+                                renderSettings(document.getElementById('appMain'));
+                            }},
+                        ]);
+                    });
+                });
+            }
+
+            function renderPasswordActions() {
+                const container = document.getElementById('passwordActions');
+                if (!container) return;
+                const hasPw = !!state.password;
+                container.innerHTML = '';
+                if (hasPw) {
+                    const changeBtn = document.createElement('button');
+                    changeBtn.className = 'btn-secondary';
+                    changeBtn.textContent = 'تغيير كلمة المرور';
+                    changeBtn.addEventListener('click', () => { lockMode = 'change'; updateLockScreen(); });
+                    container.appendChild(changeBtn);
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'btn-danger';
+                    removeBtn.textContent = 'إزالة كلمة المرور';
+                    removeBtn.addEventListener('click', () => {
+                        showModal('تأكيد الإزالة', 'هل أنت متأكد من إزالة كلمة المرور؟ سيصبح التطبيق بدون حماية.', [
+                            { key: 'cancel', label: 'إلغاء', close: true },
+                            { key: 'remove', label: 'إزالة', danger: true, callback: () => {
+                                state.password = '';
+                                saveState();
+                                showToast('🔓 تمت إزالة كلمة المرور');
+                                renderSettings(document.getElementById('appMain'));
+                            }},
+                        ]);
+                    });
+                    container.appendChild(removeBtn);
+                } else {
+                    const setBtn = document.createElement('button');
+                    setBtn.className = 'btn-primary';
+                    setBtn.textContent = 'تعيين كلمة المرور';
+                    setBtn.addEventListener('click', () => { lockMode = 'set'; updateLockScreen(); });
+                    container.appendChild(setBtn);
+                }
+            }
+
+            function escHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ==================== RENDER PRODUCTION (NO DEFAULT VALUES) ====================
+            function renderProduction(main) {
+                const today = getToday();
+                const todayRecords = state.records.filter(r => r.date === today);
+                const totalToday = todayRecords.reduce((sum, r) => sum + r.totalAmount, 0);
+                main.innerHTML = `
+                    <div class="app-card">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.factory}</span>
+                            <span>تسجيل الإنتاج</span>
+                        </div>
+                        <p class="text-secondary mb-2">📅 ${formatDateArabic(today)}</p>
+                        <div class="field-group">
+                            <label class="field-label">اختيار البضاعة</label>
+                            <select class="field-input" id="prodGoodSelect">
+                                <option value="">-- اختر البضاعة --</option>
+                                ${state.goods.map(g => `<option value="${g.id}">${escHtml(g.name)} (${g.type})</option>`).join('')}
+                            </select>
+                        </div>
+                        <div id="prodCalcPreview" style="display:none;"></div>
+                        <div class="field-group mt-2">
+                            <label class="field-label">الكمية (عدد القطع)</label>
+                            <input type="number" class="field-input" id="prodQuantity" placeholder="أدخل الكمية" min="1" step="1">
+                        </div>
+                        <div id="prodTotalDisplay" style="display:none;"></div>
+                        <button class="btn-primary btn-primary-muted mt-2" id="recordProductionBtn">
+                            ${icons.plus} تسجيل العملية
+                        </button>
+                        <div id="prodSuccessBanner" style="display:none;"></div>
+                    </div>
+                    <div class="app-card" id="todayProductionCard" style="display:${todayRecords.length>0?'block':'none'};">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.document}</span>
+                            <span>إنتاج اليوم</span>
+                        </div>
+                        <p class="text-secondary">إجمالي العمليات: <strong>${todayRecords.length}</strong> | المجموع: <strong>${formatPrice(totalToday)} $</strong></p>
+                        <div id="todayRecordsList"></div>
+                    </div>
+                    <div class="app-card" id="endOfDayCard" style="display:${todayRecords.length>0?'block':'none'};">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.users}</span>
+                            <span>نهاية الدوام - توزيع الأجور</span>
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label">الساعات الافتراضية</label>
+                            <div style="display:flex;gap:6px;align-items:center;">
+                                <input type="number" class="field-input worker-hours-input" id="eodDefaultHours" placeholder="${state.defaultHours}" min="0.5" max="24" step="0.5">
+                                <button class="btn-secondary" id="eodApplyAllBtn" style="font-size:11px;padding:7px 10px;">تطبيق على الكل</button>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:6px;margin-bottom:8px;">
+                            <button class="btn-secondary" id="eodSelectAllBtn" style="font-size:11px;">${icons.selectAll} تحديد الكل</button>
+                            <button class="btn-secondary" id="eodDeselectAllBtn" style="font-size:11px;">إلغاء التحديد</button>
+                        </div>
+                        <div id="eodWorkerChips" class="flex-wrap" style="display:flex;gap:4px;margin-bottom:8px;"></div>
+                        <div id="eodWorkerHours" class="hours-section" style="display:none;"></div>
+                        <div class="text-secondary mt-2">إجمالي الساعات: <strong id="eodTotalHours">0</strong></div>
+                        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                            <button class="btn-primary" id="eodDistributeBtn">💰 توزيع الأجور</button>
+                            <button class="btn-secondary" id="eodResetBtn">${icons.reset} تصفير</button>
+                        </div>
+                    </div>
+                `;
+
+                const prodGoodSelect = document.getElementById('prodGoodSelect');
+                const prodQuantity = document.getElementById('prodQuantity');
+                const prodCalcPreview = document.getElementById('prodCalcPreview');
+                const prodTotalDisplay = document.getElementById('prodTotalDisplay');
+                const recordProductionBtn = document.getElementById('recordProductionBtn');
+                const prodSuccessBanner = document.getElementById('prodSuccessBanner');
+
+                function updateProdPreview() {
+                    const gid = prodGoodSelect.value;
+                    const qty = parseInt(prodQuantity.value) || 0;
+                    if (!gid || qty < 1) {
+                        prodCalcPreview.style.display = 'none';
+                        prodTotalDisplay.style.display = 'none';
+                        recordProductionBtn.classList.add('btn-primary-muted');
+                        return;
+                    }
+                    const good = state.goods.find(g => g.id === gid);
+                    if (!good) return;
+                    const lm = good.length / 100, wm = good.width / 100, hm = good.height / 100;
+                    let dimsHTML = '';
+                    if (good.type === 'مساحة') dimsHTML = `<span class="calc-label">الأبعاد:</span> ${good.length}×${good.width} سم → <span class="calc-value">${lm}م × ${wm}م</span><br>`;
+                    if (good.type === 'حجم') dimsHTML = `<span class="calc-label">الأبعاد:</span> ${good.length}×${good.width}×${good.height} سم → <span class="calc-value">${lm}م × ${wm}م × ${hm}م</span><br>`;
+                    prodCalcPreview.style.display = 'block';
+                    prodCalcPreview.innerHTML = `
+                        <div class="calc-preview">
+                            ${dimsHTML}
+                            <span class="calc-label">المعادلة:</span> ${getCalcDescription(good, qty)}
+                        </div>
+                    `;
+                    const total = calculateTotal(good, qty);
+                    prodTotalDisplay.style.display = 'block';
+                    prodTotalDisplay.innerHTML = `
+                        <div class="total-display">
+                            <div class="total-label">الإجمالي</div>
+                            <div class="total-amount">${formatPrice(total)} $</div>
+                        </div>
+                    `;
+                    recordProductionBtn.classList.remove('btn-primary-muted');
+                }
+
+                prodGoodSelect.addEventListener('change', updateProdPreview);
+                prodQuantity.addEventListener('input', updateProdPreview);
+                updateProdPreview();
+
+                recordProductionBtn.addEventListener('click', function() {
+                    if (recordProductionBtn.classList.contains('btn-primary-muted')) return;
+                    const gid = prodGoodSelect.value;
+                    const qty = parseInt(prodQuantity.value) || 0;
+                    const good = state.goods.find(g => g.id === gid);
+                    if (!good || qty < 1) return;
+                    const totalAmount = calculateTotal(good, qty);
+                    const record = {
+                        id: generateId(),
+                        date: getToday(),
+                        goodId: good.id,
+                        goodName: good.name,
+                        goodType: good.type,
+                        quantity: qty,
+                        totalAmount: totalAmount,
+                        workerIds: [],
+                        workerNames: [],
+                        workerHours: [],
+                        workerWages: [],
+                        workerShare: [],
+                    };
+                    state.records.push(record);
+                    saveState();
+                    prodSuccessBanner.style.display = 'block';
+                    prodSuccessBanner.innerHTML = `<div class="success-banner">${icons.checkCircle} تم تسجيل العملية بنجاح! ${formatUnitQuantity(good.type,good.length,good.width,good.height,qty)} - ${formatPrice(totalAmount)} $</div>`;
+                    setTimeout(() => { prodSuccessBanner.style.display = 'none'; }, 4000);
+                    prodQuantity.value = '';
+                    updateProdPreview();
+                    renderProduction(main);
+                });
+
+                renderTodayRecords(todayRecords, main);
+                renderEndOfDay(todayRecords, main);
+            }
+
+            function renderTodayRecords(todayRecords, main) {
+                const container = document.getElementById('todayRecordsList');
+                if (!container) return;
+                if (todayRecords.length === 0) {
+                    container.innerHTML = '<p class="text-secondary text-center">لا توجد سجلات لليوم</p>';
+                    return;
+                }
+                container.innerHTML = todayRecords.map(r => {
+                    const good = state.goods.find(g => g.id === r.goodId) || { type: r.goodType, length: 0, width: 0, height: 0 };
+                    return `
+                        <div class="record-item">
+                            <div style="flex:1;min-width:0;">
+                                <strong>${escHtml(r.goodName)}</strong>
+                                <span class="text-secondary"> | ${formatUnitQuantity(r.goodType,good.length,good.width,good.height,r.quantity)}</span>
+                                <span style="color:var(--gold-dark);font-weight:600;"> | ${formatPrice(r.totalAmount)} $</span>
+                            </div>
+                            <button class="btn-icon-danger" data-delete-record="${r.id}" title="حذف">
+                                ${icons.trash}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+                container.querySelectorAll('[data-delete-record]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const rid = this.getAttribute('data-delete-record');
+                        state.records = state.records.filter(r => r.id !== rid);
+                        saveState();
+                        showToast('🗑️ تم حذف السجل');
+                        renderProduction(main);
+                    });
+                });
+            }
+
+            function renderEndOfDay(todayRecords, main) {
+                const chipsContainer = document.getElementById('eodWorkerChips');
+                const hoursContainer = document.getElementById('eodWorkerHours');
+                const totalHoursEl = document.getElementById('eodTotalHours');
+                const defaultHoursInput = document.getElementById('eodDefaultHours');
+                if (!chipsContainer || !hoursContainer) return;
+
+                if (!main._eodSelectedWorkers) main._eodSelectedWorkers = {};
+                if (!main._eodWorkerHours) main._eodWorkerHours = {};
+
+                const selWorkers = main._eodSelectedWorkers;
+                const workerHours = main._eodWorkerHours;
+
+                if (Object.keys(selWorkers).length === 0 && state.workers.length > 0) {
+                    state.workers.forEach(w => {
+                        selWorkers[w.id] = true;
+                        workerHours[w.id] = ''; // no default value
+                    });
+                }
+
+                function updateEODUI() {
+                    chipsContainer.innerHTML = state.workers.map(w => {
+                        const active = selWorkers[w.id];
+                        return `
+                            <span class="worker-chip ${active?'worker-chip-active':''}" data-wid="${w.id}">
+                                <span class="chip-check">${active?'✓':''}</span>
+                                ${escHtml(w.name)}
+                            </span>
+                        `;
+                    }).join('');
+                    const selectedIds = state.workers.filter(w => selWorkers[w.id]).map(w => w.id);
+                    if (selectedIds.length > 0) {
+                        hoursContainer.style.display = 'block';
+                        hoursContainer.innerHTML = state.workers.filter(w => selWorkers[w.id]).map(w => {
+                            const hrs = workerHours[w.id] || '';
+                            const wagePreview = hrs ? calculateWorkerWagePreview(w.id, parseFloat(hrs), todayRecords) : 0;
+                            return `
+                                <div class="list-item">
+                                    <span style="font-weight:600;">${escHtml(w.name)}</span>
+                                    <input type="number" class="worker-hours-input" data-wid="${w.id}" value="${hrs}" placeholder="${state.defaultHours}" min="0.1" max="24" step="0.1">
+                                    <span class="text-secondary" style="font-size:11px;">الأجر المتوقع: <strong>${formatPrice(wagePreview)} $</strong></span>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        hoursContainer.style.display = 'none';
+                    }
+                    const totalHrs = selectedIds.reduce((sum, wid) => sum + (parseFloat(workerHours[wid]) || 0), 0);
+                    totalHoursEl.textContent = totalHrs.toFixed(1) || '0.0';
+                }
+
+                function calculateWorkerWagePreview(wid, hrs, records) {
+                    const allSelectedIds = state.workers.filter(w => selWorkers[w.id]).map(w => w.id);
+                    const totalHrs = allSelectedIds.reduce((sum, id) => sum + (parseFloat(workerHours[id]) || 0), 0);
+                    if (totalHrs <= 0 || !allSelectedIds.includes(wid) || !hrs) return 0;
+                    const totalAmount = records.reduce((sum, r) => sum + r.totalAmount, 0);
+                    return (hrs / totalHrs) * totalAmount;
+                }
+
+                updateEODUI();
+
+                chipsContainer.addEventListener('click', function(e) {
+                    const chip = e.target.closest('.worker-chip');
+                    if (!chip) return;
+                    const wid = chip.getAttribute('data-wid');
+                    selWorkers[wid] = !selWorkers[wid];
+                    if (!selWorkers[wid]) delete selWorkers[wid];
+                    if (!(wid in workerHours)) workerHours[wid] = '';
+                    updateEODUI();
+                });
+
+                hoursContainer.addEventListener('input', function(e) {
+                    if (e.target.classList.contains('worker-hours-input')) {
+                        const wid = e.target.getAttribute('data-wid');
+                        const v = parseFloat(e.target.value) || 0;
+                        workerHours[wid] = v > 0 ? v : '';
+                        updateEODUI();
+                    }
+                });
+
+                document.getElementById('eodApplyAllBtn').addEventListener('click', function() {
+                    const dv = parseFloat(defaultHoursInput.value) || state.defaultHours;
+                    if (!dv || dv <= 0) {
+                        showToast('الرجاء إدخال قيمة صحيحة للساعات', 'warning');
+                        return;
+                    }
+                    Object.keys(selWorkers).forEach(wid => { workerHours[wid] = dv; });
+                    state.defaultHours = dv;
+                    saveState();
+                    updateEODUI();
+                    showToast('تم تطبيق الساعات على الجميع');
+                });
+
+                document.getElementById('eodSelectAllBtn').addEventListener('click', function() {
+                    state.workers.forEach(w => {
+                        selWorkers[w.id] = true;
+                        if (!(w.id in workerHours)) workerHours[w.id] = '';
+                    });
+                    updateEODUI();
+                });
+
+                document.getElementById('eodDeselectAllBtn').addEventListener('click', function() {
+                    Object.keys(selWorkers).forEach(k => delete selWorkers[k]);
+                    updateEODUI();
+                });
+
+                document.getElementById('eodDistributeBtn').addEventListener('click', function() {
+                    const selectedIds = state.workers.filter(w => selWorkers[w.id]).map(w => w.id);
+                    if (selectedIds.length === 0) { showToast('الرجاء اختيار عامل واحد على الأقل', 'warning'); return; }
+                    const totalHrs = selectedIds.reduce((sum, wid) => sum + (parseFloat(workerHours[wid]) || 0), 0);
+                    if (totalHrs <= 0) { showToast('إجمالي الساعات يجب أن يكون أكبر من صفر', 'warning'); return; }
+                    const today = getToday();
+                    const todayRecs = state.records.filter(r => r.date === today);
+                    if (todayRecs.length === 0) { showToast('لا توجد سجلات لليوم', 'warning'); return; }
+                    todayRecs.forEach(r => {
+                        r.workerIds = [...selectedIds];
+                        r.workerNames = selectedIds.map(wid => {
+                            const w = state.workers.find(wk => wk.id === wid);
+                            return w ? w.name : '';
+                        });
+                        r.workerHours = selectedIds.map(wid => parseFloat(workerHours[wid]) || 0);
+                        r.workerWages = selectedIds.map(wid => {
+                            const hrs = parseFloat(workerHours[wid]) || 0;
+                            return (hrs / totalHrs) * r.totalAmount;
+                        });
+                        r.workerShare = selectedIds.map(wid => {
+                            const hrs = parseFloat(workerHours[wid]) || 0;
+                            return hrs / totalHrs;
+                        });
+                    });
+                    saveState();
+                    showToast('✅ تم توزيع الأجور بنجاح على جميع سجلات اليوم');
+                    renderProduction(main);
+                });
+
+                document.getElementById('eodResetBtn').addEventListener('click', function() {
+                    main._eodSelectedWorkers = {};
+                    main._eodWorkerHours = {};
+                    state.workers.forEach(w => {
+                        main._eodSelectedWorkers[w.id] = true;
+                        main._eodWorkerHours[w.id] = '';
+                    });
+                    updateEODUI();
+                    showToast('تمت إعادة التعيين');
+                });
+
+                main._eodUpdateUI = updateEODUI;
+            }
+
+            // ==================== RENDER REPORTS (UNCHANGED) ====================
+            function renderReports(main) {
+                main.innerHTML = `
+                    <div class="report-tabs">
+                        <button class="report-tab ${reportSubTab==='invoices'?'active':''}" id="reportTabInvoices">📋 الفواتير</button>
+                        <button class="report-tab ${reportSubTab==='archive'?'active':''}" id="reportTabArchive">📦 الأرشيف</button>
+                    </div>
+                    <div id="reportContent"></div>
+                `;
+                document.getElementById('reportTabInvoices').addEventListener('click', () => {
+                    reportSubTab = 'invoices';
+                    renderReports(main);
+                });
+                document.getElementById('reportTabArchive').addEventListener('click', () => {
+                    reportSubTab = 'archive';
+                    renderReports(main);
+                });
+                if (reportSubTab === 'invoices') renderInvoices(main);
+                else renderArchive(main);
+            }
+
+            function renderInvoices(main) {
+                const content = document.getElementById('reportContent');
+                if (!content) return;
+
+                const allDates = state.records.map(r => r.date).sort();
+                let defaultStart = allDates.length ? allDates[0] : getToday();
+                let defaultEnd = getToday();
+
+                content.innerHTML = `
+                    <div class="app-card">
+                        <div class="section-header">
+                            <span class="section-icon-box">${icons.book}</span>
+                            <span>تحديد نطاق التاريخ للفاتورة</span>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
+                            <div class="field-group" style="flex:1;min-width:120px;">
+                                <label class="field-label">من تاريخ</label>
+                                <input type="date" class="field-input" id="customStartDate" value="${defaultStart}">
+                            </div>
+                            <div class="field-group" style="flex:1;min-width:120px;">
+                                <label class="field-label">إلى تاريخ</label>
+                                <input type="date" class="field-input" id="customEndDate" value="${defaultEnd}">
+                            </div>
+                            <button class="btn-primary" id="applyCustomRangeBtn" style="width:auto;padding:10px 20px;">📅 عرض الفاتورة</button>
+                            <button class="btn-secondary" id="showAllBtn" style="width:auto;padding:10px 16px;">عرض الكل</button>
+                        </div>
+                    </div>
+                    <div id="customInvoiceContainer"></div>
+                `;
+
+                function buildInvoiceHTML(records, start, end) {
+                    if (records.length === 0) {
+                        return '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات في هذا النطاق</p></div>';
+                    }
+                    const totalAmount = records.reduce((s, r) => s + r.totalAmount, 0);
+                    const workerMap = {};
+                    const dailyGoodsMap = {};
+                    records.forEach(r => {
+                        if (!dailyGoodsMap[r.date]) dailyGoodsMap[r.date] = { goods: [], dayTotal: 0 };
+                        const good = state.goods.find(g => g.id === r.goodId) || { type: r.goodType, length: 0, width: 0, height: 0 };
+                        dailyGoodsMap[r.date].goods.push({
+                            goodName: r.goodName,
+                            goodType: r.goodType,
+                            quantity: r.quantity,
+                            totalAmount: r.totalAmount,
+                            length: good.length,
+                            width: good.width,
+                            height: good.height,
+                        });
+                        dailyGoodsMap[r.date].dayTotal += r.totalAmount;
+                        if (r.workerIds && r.workerIds.length > 0) {
+                            r.workerIds.forEach((wid, i) => {
+                                const wname = r.workerNames[i] || '';
+                                if (!workerMap[wid]) workerMap[wid] = {
+                                    workerName: wname,
+                                    workDays: new Set(),
+                                    totalHours: 0,
+                                    totalWage: 0,
+                                };
+                                workerMap[wid].workDays.add(r.date);
+                                workerMap[wid].totalHours += r.workerHours[i] || 0;
+                                workerMap[wid].totalWage += r.workerWages[i] || 0;
+                            });
+                        }
+                    });
+                    const workerRows = Object.values(workerMap).map(w => ({
+                        workerName: w.workerName,
+                        workDays: w.workDays.size,
+                        totalHours: w.totalHours,
+                        totalWage: w.totalWage,
+                    }));
+                    const sortedDates = Object.keys(dailyGoodsMap).sort();
+                    const wk = start + '|' + end;
+                    return `
+                        <div class="app-card" id="invoice-custom">
+                            <div class="section-header">
+                                <span class="section-icon-box">${icons.book}</span>
+                                <span>فاتورة مخصصة: ${formatDateArabic(start)} - ${formatDateArabic(end)}</span>
+                            </div>
+                            <p class="text-secondary">عدد العمليات: <strong>${records.length}</strong> | الإجمالي: <strong>${formatPrice(totalAmount)} $</strong> | العمال: <strong>${Object.keys(workerMap).length}</strong></p>
+                            <table class="invoice-table">
+                                <thead>
+                                    <tr><th>العامل</th><th>أيام العمل</th><th>الساعات</th><th>الأجر</th></tr>
+                                </thead>
+                                <tbody>
+                                    ${workerRows.map(w=>`
+                                        <tr><td>${escHtml(w.workerName)}</td><td>${w.workDays}</td><td>${w.totalHours.toFixed(1)}</td><td>${formatPrice(w.totalWage)} $</td></tr>
+                                    `).join('')}
+                                    ${workerRows.length===0?'<tr><td colspan="4" class="text-secondary">لم يتم توزيع الأجور بعد</td></tr>':''}
+                                </tbody>
+                            </table>
+                            <details class="mt-2" style="font-size:12px;">
+                                <summary style="cursor:pointer;font-weight:600;color:var(--gold-dark);">تفاصيل يومية</summary>
+                                <div style="margin-top:8px;">
+                                    ${sortedDates.map(d=>`
+                                        <div style="margin-bottom:6px;padding:6px;background:#fafaf7;border-radius:7px;">
+                                            <strong>${formatDateArabic(d)}</strong> - إجمالي اليوم: ${formatPrice(dailyGoodsMap[d].dayTotal)} $
+                                            <div style="font-size:11px;color:#666;">
+                                                ${dailyGoodsMap[d].goods.map(g=>`${escHtml(g.goodName)} (${g.goodType}) - ${formatUnitQuantity(g.goodType,g.length,g.width,g.height,g.quantity)} - ${formatPrice(g.totalAmount)} $`).join('<br>')}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </details>
+                            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;" class="no-print">
+                                <button class="btn-primary" data-archive-range="${wk}" style="width:auto;padding:9px 14px;font-size:12px;">
+                                    ${icons.archive} أرشفة هذه الفاتورة
+                                </button>
+                                <button class="btn-secondary" data-print-range="${wk}" style="width:auto;padding:9px 14px;font-size:12px;">
+                                    ${icons.printer} طباعة
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('applyCustomRangeBtn').addEventListener('click', function() {
+                    const start = document.getElementById('customStartDate').value;
+                    const end = document.getElementById('customEndDate').value;
+                    if (!start || !end) { showToast('الرجاء اختيار تاريخ البداية والنهاية', 'warning'); return; }
+                    if (start > end) { showToast('تاريخ البداية يجب أن يكون قبل تاريخ النهاية', 'warning'); return; }
+                    const filtered = state.records.filter(r => r.date >= start && r.date <= end);
+                    document.getElementById('customInvoiceContainer').innerHTML = buildInvoiceHTML(filtered, start, end);
+                });
+
+                document.getElementById('showAllBtn').addEventListener('click', function() {
+                    if (state.records.length === 0) {
+                        document.getElementById('customInvoiceContainer').innerHTML = '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات لعرضها</p></div>';
+                        return;
+                    }
+                    const start = state.records.reduce((min, r) => r.date < min ? r.date : min, state.records[0].date);
+                    const end = state.records.reduce((max, r) => r.date > max ? r.date : max, state.records[0].date);
+                    document.getElementById('customInvoiceContainer').innerHTML = buildInvoiceHTML(state.records, start, end);
+                });
+
+                // Initial load: show all
+                if (state.records.length > 0) {
+                    const start = state.records.reduce((min, r) => r.date < min ? r.date : min, state.records[0].date);
+                    const end = state.records.reduce((max, r) => r.date > max ? r.date : max, state.records[0].date);
+                    document.getElementById('customInvoiceContainer').innerHTML = buildInvoiceHTML(state.records, start, end);
+                } else {
+                    document.getElementById('customInvoiceContainer').innerHTML = '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات لعرضها</p></div>';
+                }
+
+                document.getElementById('customInvoiceContainer').addEventListener('click', function(e) {
+                    if (e.target.closest('[data-archive-range]')) {
+                        const wk = e.target.closest('[data-archive-range]').getAttribute('data-archive-range');
+                        const [start, end] = wk.split('|');
+                        archiveCustomRange(start, end, main);
+                    }
+                    if (e.target.closest('[data-print-range]')) {
+                        window.print();
+                    }
+                });
+            }
+
+            function archiveCustomRange(start, end, main) {
+                const records = state.records.filter(r => r.date >= start && r.date <= end);
+                if (records.length === 0) return;
+                const overlay = document.getElementById('modalOverlay');
+                const card = document.getElementById('modalCard');
+                card.innerHTML = `
+                    <div class="modal-title">أرشفة الفاتورة</div>
+                    <div class="modal-body">
+                        <p>أدخل اسمًا للفاتورة المؤرشفة:</p>
+                        <input type="text" class="field-input" id="archiveLabelInput" value="فاتورة ${formatDateArabic(start)} - ${formatDateArabic(end)}" style="margin-top:8px;">
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-btn-primary" id="archiveConfirmBtn">أرشفة</button>
+                        <button id="archiveCancelBtn">إلغاء</button>
+                    </div>
+                `;
+                overlay.style.display = 'flex';
+                document.getElementById('archiveCancelBtn').addEventListener('click', () => { overlay.style.display = 'none'; });
+                document.getElementById('archiveConfirmBtn').addEventListener('click', () => {
+                    const label = document.getElementById('archiveLabelInput').value.trim() || 'فاتورة ' + formatDateArabic(start);
+                    const workerMap = {};
+                    const dailyGoodsMap = {};
+                    records.forEach(r => {
+                        if (!dailyGoodsMap[r.date]) dailyGoodsMap[r.date] = { goods: [], dayTotal: 0 };
+                        const good = state.goods.find(g => g.id === r.goodId) || { type: r.goodType, length: 0, width: 0, height: 0 };
+                        dailyGoodsMap[r.date].goods.push({
+                            goodName: r.goodName,
+                            goodType: r.goodType,
+                            quantity: r.quantity,
+                            totalAmount: r.totalAmount,
+                            length: good.length,
+                            width: good.width,
+                            height: good.height,
+                        });
+                        dailyGoodsMap[r.date].dayTotal += r.totalAmount;
+                        if (r.workerIds) {
+                            r.workerIds.forEach((wid, i) => {
+                                if (!workerMap[wid]) workerMap[wid] = {
+                                    workerName: r.workerNames[i] || '',
+                                    workDays: new Set(),
+                                    totalHours: 0,
+                                    totalWage: 0,
+                                };
+                                workerMap[wid].workDays.add(r.date);
+                                workerMap[wid].totalHours += r.workerHours[i] || 0;
+                                workerMap[wid].totalWage += r.workerWages[i] || 0;
+                            });
+                        }
+                    });
+                    const invoice = {
+                        id: generateId(),
+                        createdAt: new Date().toISOString(),
+                        label: label,
+                        dateRange: { start, end },
+                        items: Object.values(workerMap).map(w => ({
+                            workerName: w.workerName,
+                            workDays: w.workDays.size,
+                            totalHours: w.totalHours,
+                            totalWage: w.totalWage,
+                        })),
+                        dailyGoods: Object.keys(dailyGoodsMap).sort().map(d => ({
+                            date: d,
+                            goods: dailyGoodsMap[d].goods,
+                            dayTotal: dailyGoodsMap[d].dayTotal,
+                        })),
+                        totalAmount: records.reduce((s, r) => s + r.totalAmount, 0),
+                        recordsCount: records.length,
+                    };
+                    state.archivedInvoices.push(invoice);
+                    const recordIds = new Set(records.map(r => r.id));
+                    state.records = state.records.filter(r => !recordIds.has(r.id));
+                    saveState();
+                    overlay.style.display = 'none';
+                    showToast('📦 تمت أرشفة الفاتورة بنجاح');
+                    renderReports(main);
+                });
+                overlay.onclick = function(e) { if (e.target === overlay) overlay.style.display = 'none'; };
+            }
+
+            function renderArchive(main) {
+                const content = document.getElementById('reportContent');
+                if (!content) return;
+                if (state.archivedInvoices.length === 0) {
+                    content.innerHTML = '<div class="app-card"><p class="text-secondary text-center">لا توجد فواتير مؤرشفة</p></div>';
+                    return;
+                }
+                content.innerHTML = state.archivedInvoices.map(inv => {
+                    const isOpen = expandedArchives[inv.id] || false;
+                    return `
+                        <div class="archive-item">
+                            <div class="archive-header" data-toggle-archive="${inv.id}">
+                                <span>📦 <strong>${escHtml(inv.label)}</strong></span>
+                                <span class="text-secondary" style="font-size:11px;">${formatDateArabic(inv.dateRange.start)} - ${formatDateArabic(inv.dateRange.end)} | ${inv.recordsCount} عملية | ${formatPrice(inv.totalAmount)} $</span>
+                                <span>${icons.arrowDown}</span>
+                            </div>
+                            <div class="archive-details ${isOpen?'open':''}" id="archiveDetail-${inv.id}">
+                                <table class="invoice-table">
+                                    <thead><tr><th>العامل</th><th>أيام العمل</th><th>الساعات</th><th>الأجر</th></tr></thead>
+                                    <tbody>
+                                        ${inv.items.map(w=>`<tr><td>${escHtml(w.workerName)}</td><td>${w.workDays}</td><td>${w.totalHours.toFixed(1)}</td><td>${formatPrice(w.totalWage)} $</td></tr>`).join('')}
+                                    </tbody>
+                                </table>
+                                <details class="mt-2" style="font-size:12px;">
+                                    <summary style="cursor:pointer;font-weight:600;color:var(--gold-dark);">تفاصيل يومية</summary>
+                                    <div style="margin-top:6px;">
+                                        ${inv.dailyGoods.map(d=>`
+                                            <div style="margin-bottom:4px;padding:4px 6px;background:#fafaf7;border-radius:6px;">
+                                                <strong>${formatDateArabic(d.date)}</strong> - ${formatPrice(d.dayTotal)} $
+                                                <div style="font-size:11px;color:#666;">${d.goods.map(g=>`${escHtml(g.goodName)} (${g.goodType}) - ${formatUnitQuantity(g.goodType,g.length,g.width,g.height,g.quantity)} - ${formatPrice(g.totalAmount)} $`).join('<br>')}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </details>
+                                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;" class="no-print">
+                                    <button class="btn-secondary" data-print-archive="${inv.id}" style="font-size:11px;">${icons.printer} طباعة</button>
+                                    <button class="btn-danger" data-delete-archive="${inv.id}" style="font-size:11px;">${icons.trash} حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                content.querySelectorAll('[data-toggle-archive]').forEach(header => {
+                    header.addEventListener('click', function() {
+                        const invId = this.getAttribute('data-toggle-archive');
+                        expandedArchives[invId] = !expandedArchives[invId];
+                        const detail = document.getElementById('archiveDetail-' + invId);
+                        if (detail) detail.classList.toggle('open', expandedArchives[invId]);
+                    });
+                });
+                content.querySelectorAll('[data-print-archive]').forEach(btn => {
+                    btn.addEventListener('click', () => window.print());
+                });
+                content.querySelectorAll('[data-delete-archive]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const invId = this.getAttribute('data-delete-archive');
+                        const inv = state.archivedInvoices.find(i => i.id === invId);
+                        showModal('تأكيد الحذف', `هل أنت متأكد من حذف الفاتورة المؤرشفة "<strong>${escHtml(inv?inv.label:'')}</strong>"؟`, [
+                            { key: 'cancel', label: 'إلغاء', close: true },
+                            { key: 'delete', label: 'حذف', danger: true, callback: () => {
+                                state.archivedInvoices = state.archivedInvoices.filter(i => i.id !== invId);
+                                delete expandedArchives[invId];
+                                saveState();
+                                showToast('🗑️ تم حذف الفاتورة المؤرشفة');
+                                renderReports(main);
+                            }},
+                        ]);
+                    });
+                });
+            }
+
+            // ==================== INITIALIZATION ====================
+            function init() {
+                loadState();
+                document.querySelectorAll('.bottom-nav .nav-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        currentTab = this.getAttribute('data-tab');
+                        updateNavActive();
+                        renderContent();
+                    });
+                });
+                document.getElementById('lockSubmitBtn').addEventListener('click', handleLockSubmit);
+                document.getElementById('lockPasswordInput').addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') handleLockSubmit();
+                });
+                document.getElementById('lockConfirmInput').addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') handleLockSubmit();
+                });
+                document.getElementById('lockToggleEyeBtn').addEventListener('click', function() {
+                    showPassword = !showPassword;
+                    document.getElementById('lockPasswordInput').type = showPassword ? 'text' : 'password';
+                    document.getElementById('lockConfirmInput').type = showPassword ? 'text' : 'password';
+                    this.innerHTML = (showPassword ? icons.eyeOff : icons.eye) + ' ' + (showPassword ? 'إخفاء' : 'إظهار');
+                });
+                if (state.password) {
+                    lockMode = 'enter';
+                    updateLockScreen();
+                } else {
+                    lockMode = 'set';
+                    updateLockScreen();
+                }
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
