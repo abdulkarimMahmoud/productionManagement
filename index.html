@@ -715,8 +715,8 @@
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- LOCK SCREEN -->
-    <div class="lock-screen" id="lockScreen">
+    <!-- LOCK SCREEN (only shown if password is set) -->
+    <div class="lock-screen" id="lockScreen" style="display: none;">
         <div class="lock-card" id="lockCard">
             <div class="lock-icon" id="lockIconSvg"></div>
             <h3 style="margin-bottom:6px;color:#333;" id="lockTitle">قفل الأمان</h3>
@@ -982,6 +982,19 @@
             function updateLockScreen() {
                 const hasPassword = !!state.password;
                 const lockScreen = document.getElementById('lockScreen');
+                const appShell = document.getElementById('appShell');
+
+                if (!hasPassword) {
+                    // No password: skip lock screen entirely
+                    lockScreen.style.display = 'none';
+                    appShell.style.display = 'flex';
+                    currentTab = 'production';
+                    updateNavActive();
+                    renderContent();
+                    return;
+                }
+
+                // Password exists: show lock screen
                 const lockTitle = document.getElementById('lockTitle');
                 const lockSubtitle = document.getElementById('lockSubtitle');
                 const lockSubmitBtn = document.getElementById('lockSubmitBtn');
@@ -991,16 +1004,8 @@
                 const lockConfirmInput = document.getElementById('lockConfirmInput');
                 const lockToggleEyeBtn = document.getElementById('lockToggleEyeBtn');
                 const lockIconSvg = document.getElementById('lockIconSvg');
-                const appShell = document.getElementById('appShell');
 
-                if (!hasPassword) {
-                    lockMode = 'set';
-                    lockTitle.textContent = 'تعيين كلمة المرور';
-                    lockSubtitle.textContent = 'أنشئ كلمة مرور جديدة (4 أحرف على الأقل)';
-                    lockSubmitBtn.textContent = 'تعيين';
-                    lockConfirmGroup.hidden = false;
-                    lockIconSvg.innerHTML = icons.lock;
-                } else if (lockMode === 'enter') {
+                if (lockMode === 'enter') {
                     lockTitle.textContent = 'قفل الأمان';
                     lockSubtitle.textContent = 'أدخل كلمة المرور للمتابعة';
                     lockSubmitBtn.textContent = 'دخول';
@@ -1035,25 +1040,7 @@
 
                 lockError.hidden = true;
 
-                if (lockMode === 'set') {
-                    if (pw.length < 4) {
-                        lockError.textContent = 'كلمة المرور يجب أن تكون 4 أحرف على الأقل';
-                        lockError.hidden = false;
-                        shakeLock();
-                        return;
-                    }
-                    if (pw !== cpw) {
-                        lockError.textContent = 'كلمتا المرور غير متطابقتين';
-                        lockError.hidden = false;
-                        shakeLock();
-                        return;
-                    }
-                    state.password = simpleHash(pw);
-                    saveState();
-                    lockMode = 'enter';
-                    showToast('✅ تم تعيين كلمة المرور بنجاح');
-                    unlockApp();
-                } else if (lockMode === 'enter') {
+                if (lockMode === 'enter') {
                     if (simpleHash(pw) !== state.password) {
                         lockError.textContent = 'كلمة المرور غير صحيحة';
                         lockError.hidden = false;
@@ -1127,7 +1114,7 @@
             pageInStyle.textContent = '@keyframes pageIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}';
             document.head.appendChild(pageInStyle);
 
-            // ==================== RENDER SETTINGS (NO DEFAULT VALUES IN FIELDS) ====================
+            // ==================== RENDER SETTINGS ====================
             function renderSettings(main) {
                 main.innerHTML = `
                     <div class="app-card">
@@ -1199,7 +1186,7 @@
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
                             <span style="width:10px;height:10px;border-radius:50%;background:${state.password?'#22c55e':'#ccc'};display:inline-block;"></span>
-                            <span style="font-size:13px;color:#555;">${state.password?'كلمة المرور مفعلة':'كلمة المرور غير مفعلة'}</span>
+                            <span style="font-size:13px;color:#555;">${state.password?'كلمة المرور مفعلة':'كلمة المرور غير مفعلة (اختيارية)'}</span>
                         </div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;" id="passwordActions"></div>
                         <div id="passwordChangeForm" style="display:none;margin-top:10px;"></div>
@@ -1421,8 +1408,12 @@
                 } else {
                     const setBtn = document.createElement('button');
                     setBtn.className = 'btn-primary';
-                    setBtn.textContent = 'تعيين كلمة المرور';
-                    setBtn.addEventListener('click', () => { lockMode = 'set'; updateLockScreen(); });
+                    setBtn.textContent = 'تعيين كلمة مرور (اختياري)';
+                    setBtn.addEventListener('click', () => {
+                        // Set new password mode
+                        lockMode = 'set';
+                        updateLockScreen();
+                    });
                     container.appendChild(setBtn);
                 }
             }
@@ -1433,7 +1424,7 @@
                 return div.innerHTML;
             }
 
-            // ==================== RENDER PRODUCTION (NO DEFAULT VALUES) ====================
+            // ==================== RENDER PRODUCTION ====================
             function renderProduction(main) {
                 const today = getToday();
                 const todayRecords = state.records.filter(r => r.date === today);
@@ -1601,10 +1592,20 @@
                 container.querySelectorAll('[data-delete-record]').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const rid = this.getAttribute('data-delete-record');
-                        state.records = state.records.filter(r => r.id !== rid);
-                        saveState();
-                        showToast('🗑️ تم حذف السجل');
-                        renderProduction(main);
+                        const record = state.records.find(r => r.id === rid);
+                        if (!record) return;
+                        showModal('تأكيد حذف العملية',
+                            `هل أنت متأكد من حذف العملية "<strong>${escHtml(record.goodName)}</strong>" بقيمة ${formatPrice(record.totalAmount)} $ ؟`,
+                            [
+                                { key: 'cancel', label: 'إلغاء', close: true },
+                                { key: 'delete', label: 'حذف', danger: true, callback: () => {
+                                    state.records = state.records.filter(r => r.id !== rid);
+                                    saveState();
+                                    showToast('🗑️ تم حذف السجل');
+                                    renderProduction(main);
+                                }},
+                            ]
+                        );
                     });
                 });
             }
@@ -1625,7 +1626,7 @@
                 if (Object.keys(selWorkers).length === 0 && state.workers.length > 0) {
                     state.workers.forEach(w => {
                         selWorkers[w.id] = true;
-                        workerHours[w.id] = ''; // no default value
+                        workerHours[w.id] = '';
                     });
                 }
 
@@ -1758,7 +1759,7 @@
                 main._eodUpdateUI = updateEODUI;
             }
 
-            // ==================== RENDER REPORTS (UNCHANGED) ====================
+            // ==================== RENDER REPORTS ====================
             function renderReports(main) {
                 main.innerHTML = `
                     <div class="report-tabs">
@@ -2109,12 +2110,18 @@
                     document.getElementById('lockConfirmInput').type = showPassword ? 'text' : 'password';
                     this.innerHTML = (showPassword ? icons.eyeOff : icons.eye) + ' ' + (showPassword ? 'إخفاء' : 'إظهار');
                 });
+
+                // If password is set, show lock screen; otherwise go directly to app
                 if (state.password) {
                     lockMode = 'enter';
                     updateLockScreen();
                 } else {
-                    lockMode = 'set';
-                    updateLockScreen();
+                    // No password - skip lock screen and show app directly
+                    document.getElementById('lockScreen').style.display = 'none';
+                    document.getElementById('appShell').style.display = 'flex';
+                    currentTab = 'production';
+                    updateNavActive();
+                    renderContent();
                 }
             }
 
