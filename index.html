@@ -776,7 +776,7 @@
 
     <script>
         (function() {
-            // ==================== SVG ICONS ====================
+            // SVG Icons
             const icons = {
                 gear: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83"/></svg>',
                 factory: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20M5 20V8l7-5 7 5v12"/><rect x="8" y="12" width="3" height="8"/><rect x="13" y="10" width="3" height="10"/></svg>',
@@ -802,8 +802,7 @@
                 clock: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>',
             };
 
-            // ==================== STATE ====================
-            const GoodType = { PIECE: 'قطعة', AREA: 'مساحة', VOLUME: 'حجم' };
+            // State
             const defaultGoods = [
                 { id: 'default-1', name: 'بلاط 30×40 سم', type: 'مساحة', length: 30, width: 40, height: 0, price: 12 },
                 { id: 'default-2', name: 'اصفر20×20×40 سم', type: 'حجم', length: 20, width: 20, height: 40, price: 110 },
@@ -834,9 +833,7 @@
                 return 'h_' + Math.abs(hash).toString(36);
             }
 
-            function saveState() {
-                localStorage.setItem('al-wefaq-storage', JSON.stringify(state));
-            }
+            function saveState() { localStorage.setItem('al-wefaq-storage', JSON.stringify(state)); }
 
             function loadState() {
                 const s = localStorage.getItem('al-wefaq-storage');
@@ -849,12 +846,8 @@
                         state.archivedInvoices = parsed.archivedInvoices || [];
                         state.password = parsed.password || '';
                         state.defaultHours = parsed.defaultHours || defaultHours;
-                    } catch (e) {
-                        resetState();
-                    }
-                } else {
-                    resetState();
-                }
+                    } catch (e) { resetState(); }
+                } else { resetState(); }
             }
 
             function resetState() {
@@ -867,11 +860,8 @@
                 saveState();
             }
 
-            function generateId() {
-                return Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
-            }
+            function generateId() { return Math.random().toString(36).substring(2, 11) + Date.now().toString(36); }
 
-            // ==================== CALC HELPERS ====================
             function calculateTotal(good, quantity) {
                 const lm = good.length / 100, wm = good.width / 100, hm = good.height / 100;
                 switch (good.type) {
@@ -894,16 +884,15 @@
             }
 
             function formatPrice(amount) {
-                const fixed2 = amount.toFixed(2);
-                const fixed4 = amount.toFixed(4);
+                const fixed2 = amount.toFixed(2), fixed4 = amount.toFixed(4);
                 return parseFloat(fixed4) !== parseFloat(fixed2) ? fixed4 : fixed2;
             }
 
             function calcUnitQuantity(type, length, width, height, quantity) {
                 switch (type) {
                     case 'قطعة': return quantity;
-                    case 'مساحة': return (length / 100) * (width / 100) * quantity;
-                    case 'حجم': return (length / 100) * (width / 100) * (height / 100) * quantity;
+                    case 'مساحة': return (length/100)*(width/100)*quantity;
+                    case 'حجم': return (length/100)*(width/100)*(height/100)*quantity;
                     default: return quantity;
                 }
             }
@@ -918,31 +907,23 @@
                 }
             }
 
-            function getToday() {
-                return new Date().toISOString().split('T')[0];
-            }
+            function getToday() { return new Date().toISOString().split('T')[0]; }
 
             function formatDateArabic(dateStr) {
                 const d = new Date(dateStr + 'T00:00:00');
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                return d.toLocaleDateString('ar-SA', options);
+                return d.toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             }
 
-            // ==================== TOAST SYSTEM ====================
-            function showToast(msg, type = '') {
+            // Toast & Modal
+            function showToast(msg, type='') {
                 const container = document.getElementById('toastContainer');
                 const toast = document.createElement('div');
-                toast.className = 'toast ' + (type || '');
+                toast.className = 'toast ' + (type||'');
                 toast.textContent = msg;
                 container.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transition = 'opacity 0.3s';
-                    setTimeout(() => toast.remove(), 300);
-                }, 2800);
+                setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2800);
             }
 
-            // ==================== MODAL SYSTEM ====================
             function showModal(title, body, actions) {
                 const overlay = document.getElementById('modalOverlay');
                 const card = document.getElementById('modalCard');
@@ -952,11 +933,7 @@
                     actionsHTML += `<button class="${cls}" data-action="${a.key}" style="${a.style||''}">${a.label}</button>`;
                 });
                 actionsHTML += '</div>';
-                card.innerHTML = `
-                    <div class="modal-title">${title}</div>
-                    <div class="modal-body">${body}</div>
-                    ${actionsHTML}
-                `;
+                card.innerHTML = `<div class="modal-title">${title}</div><div class="modal-body">${body}</div>${actionsHTML}`;
                 overlay.style.display = 'flex';
                 card.querySelectorAll('[data-action]').forEach(btn => {
                     btn.addEventListener('click', function() {
@@ -966,35 +943,22 @@
                         if (action && action.close !== false) overlay.style.display = 'none';
                     });
                 });
-                overlay.onclick = function(e) {
-                    if (e.target === overlay) overlay.style.display = 'none';
-                };
+                overlay.onclick = function(e) { if (e.target === overlay) overlay.style.display = 'none'; };
             }
 
-            function hideModal() {
-                document.getElementById('modalOverlay').style.display = 'none';
-            }
-
-            // ==================== LOCK SCREEN ====================
-            let lockMode = 'enter';
-            let showPassword = false;
+            // Lock screen
+            let lockMode = 'enter', showPassword = false;
 
             function updateLockScreen() {
                 const hasPassword = !!state.password;
                 const lockScreen = document.getElementById('lockScreen');
                 const appShell = document.getElementById('appShell');
-
                 if (!hasPassword) {
-                    // No password: skip lock screen entirely
                     lockScreen.style.display = 'none';
                     appShell.style.display = 'flex';
-                    currentTab = 'production';
-                    updateNavActive();
-                    renderContent();
+                    currentTab = 'production'; updateNavActive(); renderContent();
                     return;
                 }
-
-                // Password exists: show lock screen
                 const lockTitle = document.getElementById('lockTitle');
                 const lockSubtitle = document.getElementById('lockSubtitle');
                 const lockSubmitBtn = document.getElementById('lockSubmitBtn');
@@ -1004,7 +968,6 @@
                 const lockConfirmInput = document.getElementById('lockConfirmInput');
                 const lockToggleEyeBtn = document.getElementById('lockToggleEyeBtn');
                 const lockIconSvg = document.getElementById('lockIconSvg');
-
                 if (lockMode === 'enter') {
                     lockTitle.textContent = 'قفل الأمان';
                     lockSubtitle.textContent = 'أدخل كلمة المرور للمتابعة';
@@ -1019,8 +982,7 @@
                     lockIconSvg.innerHTML = icons.lock;
                 }
                 lockError.hidden = true;
-                lockPasswordInput.value = '';
-                lockConfirmInput.value = '';
+                lockPasswordInput.value = ''; lockConfirmInput.value = '';
                 lockPasswordInput.type = showPassword ? 'text' : 'password';
                 lockConfirmInput.type = showPassword ? 'text' : 'password';
                 lockToggleEyeBtn.innerHTML = (showPassword ? icons.eyeOff : icons.eye) + ' ' + (showPassword ? 'إخفاء' : 'إظهار');
@@ -1031,78 +993,43 @@
             }
 
             function handleLockSubmit() {
-                const lockPasswordInput = document.getElementById('lockPasswordInput');
-                const lockConfirmInput = document.getElementById('lockConfirmInput');
+                const pw = document.getElementById('lockPasswordInput').value.trim();
+                const cpw = document.getElementById('lockConfirmInput').value.trim();
                 const lockError = document.getElementById('lockError');
-                const lockCard = document.getElementById('lockCard');
-                const pw = lockPasswordInput.value.trim();
-                const cpw = lockConfirmInput.value.trim();
-
                 lockError.hidden = true;
-
                 if (lockMode === 'enter') {
-                    if (simpleHash(pw) !== state.password) {
-                        lockError.textContent = 'كلمة المرور غير صحيحة';
-                        lockError.hidden = false;
-                        shakeLock();
-                        return;
-                    }
+                    if (simpleHash(pw) !== state.password) { lockError.hidden = false; shakeLock(); return; }
                     unlockApp();
                 } else if (lockMode === 'change') {
-                    if (simpleHash(pw) !== state.password) {
-                        lockError.textContent = 'كلمة المرور الحالية غير صحيحة';
-                        lockError.hidden = false;
-                        shakeLock();
-                        return;
-                    }
-                    if (cpw.length < 4) {
-                        lockError.textContent = 'كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل';
-                        lockError.hidden = false;
-                        shakeLock();
-                        return;
-                    }
-                    state.password = simpleHash(cpw);
-                    saveState();
-                    lockMode = 'enter';
-                    showToast('✅ تم تغيير كلمة المرور بنجاح');
-                    unlockApp();
+                    if (simpleHash(pw) !== state.password) { lockError.hidden = false; shakeLock(); return; }
+                    if (cpw.length < 4) { lockError.textContent = 'كلمة المرور الجديدة يجب أن تكون 4 أحرف على الأقل'; lockError.hidden = false; shakeLock(); return; }
+                    state.password = simpleHash(cpw); saveState();
+                    lockMode = 'enter'; showToast('✅ تم تغيير كلمة المرور بنجاح'); unlockApp();
                 }
             }
 
             function shakeLock() {
-                const lockCard = document.getElementById('lockCard');
-                lockCard.classList.remove('lock-shake');
-                void lockCard.offsetWidth;
-                lockCard.classList.add('lock-shake');
-                setTimeout(() => lockCard.classList.remove('lock-shake'), 500);
+                const card = document.getElementById('lockCard');
+                card.classList.remove('lock-shake'); void card.offsetWidth; card.classList.add('lock-shake');
+                setTimeout(() => card.classList.remove('lock-shake'), 500);
             }
 
             function unlockApp() {
                 document.getElementById('lockScreen').style.display = 'none';
                 document.getElementById('appShell').style.display = 'flex';
-                lockMode = 'enter';
-                currentTab = 'production';
-                updateNavActive();
-                renderContent();
+                lockMode = 'enter'; currentTab = 'production'; updateNavActive(); renderContent();
             }
 
-            // ==================== NAVIGATION ====================
-            let currentTab = 'production';
-            let reportSubTab = 'invoices';
-            let expandedArchives = {};
+            // Navigation
+            let currentTab = 'production', reportSubTab = 'invoices', expandedArchives = {};
 
             function updateNavActive() {
-                document.querySelectorAll('.bottom-nav .nav-btn').forEach(b => {
-                    b.classList.toggle('active', b.getAttribute('data-tab') === currentTab);
-                });
+                document.querySelectorAll('.bottom-nav .nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === currentTab));
             }
 
-            // ==================== RENDER ====================
             function renderContent() {
                 const main = document.getElementById('appMain');
-                main.style.animation = 'none';
-                main.offsetHeight;
-                main.style.animation = 'pageIn 0.25s ease';
+                main.style.animation = 'none'; main.offsetHeight; main.style.animation = 'pageIn 0.25s ease';
                 switch (currentTab) {
                     case 'settings': renderSettings(main); break;
                     case 'production': renderProduction(main); break;
@@ -1114,377 +1041,163 @@
             pageInStyle.textContent = '@keyframes pageIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}';
             document.head.appendChild(pageInStyle);
 
-            // ==================== RENDER SETTINGS ====================
+            function escHtml(str) {
+                const div = document.createElement('div'); div.textContent = str; return div.innerHTML;
+            }
+
+            // ========== SETTINGS ==========
             function renderSettings(main) {
                 main.innerHTML = `
                     <div class="app-card">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.box}</span>
-                            <span>إدارة البضائع</span>
-                        </div>
-                        <div class="field-group">
-                            <label class="field-label">اسم البضاعة</label>
-                            <input type="text" class="field-input" id="goodNameInput" placeholder="مثال: بلاط 40×40 سم">
-                        </div>
-                        <div class="field-group">
-                            <label class="field-label">نوع البضاعة</label>
-                            <div style="display:flex;gap:6px;flex-wrap:wrap;" id="goodTypeBtns">
-                                <button class="worker-chip worker-chip-active" data-type="قطعة">قطعة</button>
-                                <button class="worker-chip" data-type="مساحة">مساحة</button>
-                                <button class="worker-chip" data-type="حجم">حجم</button>
-                            </div>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.box}</span><span>إدارة البضائع</span></div>
+                        <div class="field-group"><label class="field-label">اسم البضاعة</label><input type="text" class="field-input" id="goodNameInput" placeholder="مثال: بلاط 40×40 سم"></div>
+                        <div class="field-group"><label class="field-label">نوع البضاعة</label><div style="display:flex;gap:6px;flex-wrap:wrap;" id="goodTypeBtns"><button class="worker-chip worker-chip-active" data-type="قطعة">قطعة</button><button class="worker-chip" data-type="مساحة">مساحة</button><button class="worker-chip" data-type="حجم">حجم</button></div></div>
                         <div id="goodDimsContainer" style="display:none;">
-                            <div class="field-group" id="dimLengthGroup" hidden>
-                                <label class="field-label">الطول (سم)</label>
-                                <input type="number" class="field-input" id="goodLength" placeholder="0" min="0" step="0.1">
-                            </div>
-                            <div class="field-group" id="dimWidthGroup" hidden>
-                                <label class="field-label">العرض (سم)</label>
-                                <input type="number" class="field-input" id="goodWidth" placeholder="0" min="0" step="0.1">
-                            </div>
-                            <div class="field-group" id="dimHeightGroup" hidden>
-                                <label class="field-label">الارتفاع (سم)</label>
-                                <input type="number" class="field-input" id="goodHeight" placeholder="0" min="0" step="0.1">
-                            </div>
+                            <div class="field-group" id="dimLengthGroup" hidden><label class="field-label">الطول (سم)</label><input type="number" class="field-input" id="goodLength" placeholder="0" min="0" step="0.1"></div>
+                            <div class="field-group" id="dimWidthGroup" hidden><label class="field-label">العرض (سم)</label><input type="number" class="field-input" id="goodWidth" placeholder="0" min="0" step="0.1"></div>
+                            <div class="field-group" id="dimHeightGroup" hidden><label class="field-label">الارتفاع (سم)</label><input type="number" class="field-input" id="goodHeight" placeholder="0" min="0" step="0.1"></div>
                         </div>
-                        <div class="field-group">
-                            <label class="field-label">السعر ($)</label>
-                            <input type="number" class="field-input" id="goodPrice" placeholder="0.00" min="0.01" step="0.01">
-                        </div>
-                        <button class="btn-primary btn-primary-muted" id="addGoodBtn">
-                            ${icons.plus} إضافة بضاعة
-                        </button>
+                        <div class="field-group"><label class="field-label">السعر ($)</label><input type="number" class="field-input" id="goodPrice" placeholder="0.00" min="0.01" step="0.01"></div>
+                        <button class="btn-primary btn-primary-muted" id="addGoodBtn">${icons.plus} إضافة بضاعة</button>
                         <div id="goodsList" class="mt-2"></div>
                     </div>
-
                     <div class="app-card">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.users}</span>
-                            <span>إدارة العمال</span>
-                        </div>
-                        <div class="field-group">
-                            <label class="field-label">الساعات الافتراضية / يوم</label>
-                            <input type="number" class="field-input" id="defaultHoursInput" placeholder="${state.defaultHours}" min="0.5" max="24" step="0.5">
-                        </div>
-                        <div class="field-group">
-                            <label class="field-label">اسم العامل</label>
-                            <div style="display:flex;gap:6px;">
-                                <input type="text" class="field-input" id="workerNameInput" placeholder="اسم العامل" style="flex:1;">
-                                <button class="btn-primary" id="addWorkerBtn" style="width:auto;padding:10px 16px;white-space:nowrap;">
-                                    ${icons.plus} إضافة
-                                </button>
-                            </div>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.users}</span><span>إدارة العمال</span></div>
+                        <div class="field-group"><label class="field-label">الساعات الافتراضية / يوم</label><input type="number" class="field-input" id="defaultHoursInput" placeholder="${state.defaultHours}" min="0.5" max="24" step="0.5"></div>
+                        <div class="field-group"><label class="field-label">اسم العامل</label><div style="display:flex;gap:6px;"><input type="text" class="field-input" id="workerNameInput" placeholder="اسم العامل" style="flex:1;"><button class="btn-primary" id="addWorkerBtn" style="width:auto;padding:10px 16px;">${icons.plus} إضافة</button></div></div>
                         <div id="workersList" class="mt-2"></div>
                     </div>
-
                     <div class="app-card">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.shield}</span>
-                            <span>إدارة كلمة المرور</span>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                            <span style="width:10px;height:10px;border-radius:50%;background:${state.password?'#22c55e':'#ccc'};display:inline-block;"></span>
-                            <span style="font-size:13px;color:#555;">${state.password?'كلمة المرور مفعلة':'كلمة المرور غير مفعلة (اختيارية)'}</span>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.shield}</span><span>إدارة كلمة المرور</span></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span style="width:10px;height:10px;border-radius:50%;background:${state.password?'#22c55e':'#ccc'};display:inline-block;"></span><span style="font-size:13px;color:#555;">${state.password?'كلمة المرور مفعلة':'كلمة المرور غير مفعلة (اختيارية)'}</span></div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;" id="passwordActions"></div>
-                        <div id="passwordChangeForm" style="display:none;margin-top:10px;"></div>
                     </div>
                 `;
 
                 let selectedGoodType = 'قطعة';
                 const goodTypeBtns = document.getElementById('goodTypeBtns');
                 const goodDimsContainer = document.getElementById('goodDimsContainer');
-                const dimLengthGroup = document.getElementById('dimLengthGroup');
-                const dimWidthGroup = document.getElementById('dimWidthGroup');
-                const dimHeightGroup = document.getElementById('dimHeightGroup');
-                const goodLength = document.getElementById('goodLength');
-                const goodWidth = document.getElementById('goodWidth');
-                const goodHeight = document.getElementById('goodHeight');
-                const goodPrice = document.getElementById('goodPrice');
-                const goodNameInput = document.getElementById('goodNameInput');
-                const addGoodBtn = document.getElementById('addGoodBtn');
+                const dimLength = document.getElementById('dimLengthGroup'), dimWidth = document.getElementById('dimWidthGroup'), dimHeight = document.getElementById('dimHeightGroup');
+                const goodLength = document.getElementById('goodLength'), goodWidth = document.getElementById('goodWidth'), goodHeight = document.getElementById('goodHeight');
+                const goodPrice = document.getElementById('goodPrice'), goodNameInput = document.getElementById('goodNameInput'), addGoodBtn = document.getElementById('addGoodBtn');
 
                 function updateGoodTypeUI() {
-                    goodTypeBtns.querySelectorAll('button').forEach(b => {
-                        b.classList.toggle('worker-chip-active', b.getAttribute('data-type') === selectedGoodType);
-                    });
+                    goodTypeBtns.querySelectorAll('button').forEach(b => b.classList.toggle('worker-chip-active', b.dataset.type === selectedGoodType));
                     goodDimsContainer.style.display = selectedGoodType === 'قطعة' ? 'none' : 'block';
-                    dimLengthGroup.hidden = (selectedGoodType === 'قطعة');
-                    dimWidthGroup.hidden = (selectedGoodType === 'قطعة');
-                    dimHeightGroup.hidden = (selectedGoodType !== 'حجم');
+                    dimLength.hidden = (selectedGoodType === 'قطعة');
+                    dimWidth.hidden = (selectedGoodType === 'قطعة');
+                    dimHeight.hidden = (selectedGoodType !== 'حجم');
                     checkAddGoodValid();
                 }
 
-                goodTypeBtns.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('worker-chip') || e.target.closest('.worker-chip')) {
-                        const btn = e.target.closest('.worker-chip');
-                        selectedGoodType = btn.getAttribute('data-type');
-                        updateGoodTypeUI();
-                    }
+                goodTypeBtns.addEventListener('click', e => {
+                    const btn = e.target.closest('.worker-chip');
+                    if (btn) { selectedGoodType = btn.dataset.type; updateGoodTypeUI(); }
                 });
 
-                function getGoodFormData() {
-                    return {
-                        name: goodNameInput.value.trim(),
-                        type: selectedGoodType,
-                        length: parseFloat(goodLength.value) || 0,
-                        width: parseFloat(goodWidth.value) || 0,
-                        height: parseFloat(goodHeight.value) || 0,
-                        price: parseFloat(goodPrice.value)
-                    };
-                }
-
                 function checkAddGoodValid() {
-                    const d = getGoodFormData();
+                    const d = { name: goodNameInput.value.trim(), type: selectedGoodType, length: parseFloat(goodLength.value)||0, width: parseFloat(goodWidth.value)||0, height: parseFloat(goodHeight.value)||0, price: parseFloat(goodPrice.value) };
                     let valid = d.name.length > 0 && d.price > 0;
                     if (d.type === 'مساحة') valid = valid && d.length > 0 && d.width > 0;
                     if (d.type === 'حجم') valid = valid && d.length > 0 && d.width > 0 && d.height > 0;
                     addGoodBtn.classList.toggle('btn-primary-muted', !valid);
                 }
-
-                [goodNameInput, goodPrice, goodLength, goodWidth, goodHeight].forEach(el => {
-                    if (el) el.addEventListener('input', checkAddGoodValid);
-                });
+                [goodNameInput, goodPrice, goodLength, goodWidth, goodHeight].forEach(el => el && el.addEventListener('input', checkAddGoodValid));
                 updateGoodTypeUI();
 
-                addGoodBtn.addEventListener('click', function() {
+                addGoodBtn.addEventListener('click', () => {
                     if (addGoodBtn.classList.contains('btn-primary-muted')) return;
-                    const d = getGoodFormData();
-                    const newGood = {
-                        id: generateId(),
-                        name: d.name,
-                        type: d.type,
-                        length: d.length,
-                        width: d.width,
-                        height: d.height,
-                        price: d.price,
-                    };
-                    state.goods.push(newGood);
-                    saveState();
-                    showToast('✅ تمت إضافة البضاعة بنجاح');
-                    renderSettings(main);
+                    state.goods.push({ id: generateId(), name: goodNameInput.value.trim(), type: selectedGoodType, length: parseFloat(goodLength.value)||0, width: parseFloat(goodWidth.value)||0, height: parseFloat(goodHeight.value)||0, price: parseFloat(goodPrice.value) });
+                    saveState(); showToast('✅ تمت إضافة البضاعة'); renderSettings(main);
                 });
 
-                renderGoodsList();
-                renderWorkersList();
-                const defaultHoursInput = document.getElementById('defaultHoursInput');
-                defaultHoursInput.addEventListener('change', function() {
-                    const v = parseFloat(this.value);
-                    if (v > 0 && v <= 24) {
-                        state.defaultHours = v;
-                        saveState();
-                        showToast('تم تحديث الساعات الافتراضية');
-                    }
-                });
-                document.getElementById('addWorkerBtn').addEventListener('click', function() {
-                    const nameInput = document.getElementById('workerNameInput');
-                    const name = nameInput.value.trim();
-                    if (!name) { showToast('الرجاء إدخال اسم العامل', 'warning'); return; }
+                renderGoodsList(); renderWorkersList();
+                document.getElementById('defaultHoursInput').addEventListener('change', function() { const v = parseFloat(this.value); if(v>0&&v<=24){ state.defaultHours=v; saveState(); showToast('تم تحديث الساعات الافتراضية'); } });
+                document.getElementById('addWorkerBtn').addEventListener('click', () => {
+                    const name = document.getElementById('workerNameInput').value.trim();
+                    if(!name) { showToast('الرجاء إدخال اسم العامل','warning'); return; }
                     state.workers.push({ id: generateId(), name });
-                    saveState();
-                    nameInput.value = '';
-                    showToast('✅ تمت إضافة العامل');
-                    renderSettings(main);
+                    saveState(); document.getElementById('workerNameInput').value = ''; showToast('✅ تمت إضافة العامل'); renderSettings(main);
                 });
                 renderPasswordActions();
             }
 
             function renderGoodsList() {
-                const container = document.getElementById('goodsList');
-                if (!container) return;
-                if (state.goods.length === 0) {
-                    container.innerHTML = '<p class="text-secondary text-center">لا توجد بضائع</p>';
-                    return;
-                }
-                container.innerHTML = state.goods.map((g, i) => {
-                    let dimsText = '';
-                    if (g.type === 'مساحة') dimsText = ` | ${g.length}×${g.width} سم`;
-                    if (g.type === 'حجم') dimsText = ` | ${g.length}×${g.width}×${g.height} سم`;
-                    return `
-                        <div class="list-item">
-                            <div style="flex:1;min-width:0;">
-                                <span style="font-weight:600;">${escHtml(g.name)}</span>
-                                <span class="text-secondary">[${g.type}${dimsText}] - ${g.price} $</span>
-                            </div>
-                            <button class="btn-icon-danger" data-delete-good="${g.id}" title="حذف">
-                                ${icons.trash}
-                            </button>
-                        </div>
-                    `;
+                const container = document.getElementById('goodsList'); if(!container) return;
+                if(state.goods.length===0){ container.innerHTML='<p class="text-secondary text-center">لا توجد بضائع</p>'; return; }
+                container.innerHTML = state.goods.map(g => {
+                    let dims = ''; if(g.type==='مساحة') dims=` | ${g.length}×${g.width} سم`; if(g.type==='حجم') dims=` | ${g.length}×${g.width}×${g.height} سم`;
+                    return `<div class="list-item"><div style="flex:1;min-width:0;"><span style="font-weight:600;">${escHtml(g.name)}</span><span class="text-secondary">[${g.type}${dims}] - ${g.price} $</span></div><button class="btn-icon-danger" data-delete-good="${g.id}">${icons.trash}</button></div>`;
                 }).join('');
-                container.querySelectorAll('[data-delete-good]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const gid = this.getAttribute('data-delete-good');
-                        if (state.goods.length <= 1) {
-                            showToast('لا يمكن حذف آخر بضاعة', 'warning');
-                            return;
-                        }
-                        const good = state.goods.find(g => g.id === gid);
-                        showModal('تأكيد الحذف', `هل أنت متأكد من حذف البضاعة "<strong>${escHtml(good?good.name:'')}</strong>"؟`, [
-                            { key: 'cancel', label: 'إلغاء', close: true },
-                            { key: 'delete', label: 'حذف', danger: true, callback: () => {
-                                state.goods = state.goods.filter(g => g.id !== gid);
-                                saveState();
-                                showToast('🗑️ تم حذف البضاعة');
-                                renderSettings(document.getElementById('appMain'));
-                            }},
-                        ]);
-                    });
-                });
+                container.querySelectorAll('[data-delete-good]').forEach(btn => btn.addEventListener('click', function() {
+                    const gid = this.dataset.deleteGood;
+                    if(state.goods.length<=1){ showToast('لا يمكن حذف آخر بضاعة','warning'); return; }
+                    const good = state.goods.find(g=>g.id===gid);
+                    showModal('تأكيد الحذف', `هل أنت متأكد من حذف البضاعة "<strong>${escHtml(good.name)}</strong>"؟`, [
+                        { key:'cancel', label:'إلغاء', close:true },
+                        { key:'delete', label:'حذف', danger:true, callback:()=>{ state.goods=state.goods.filter(g=>g.id!==gid); saveState(); showToast('🗑️ تم حذف البضاعة'); renderSettings(document.getElementById('appMain')); }}
+                    ]);
+                }));
             }
 
             function renderWorkersList() {
-                const container = document.getElementById('workersList');
-                if (!container) return;
-                if (state.workers.length === 0) {
-                    container.innerHTML = '<p class="text-secondary text-center">لا يوجد عمال</p>';
-                    return;
-                }
-                const colors = ['#dbb960', '#b8952f', '#8b7a3a', '#c9a84c', '#a08030'];
-                container.innerHTML = state.workers.map((w, i) => {
-                    const initial = w.name.charAt(0);
-                    const bgColor = colors[i % colors.length];
-                    return `
-                        <div class="list-item">
-                            <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
-                                <span style="width:28px;height:28px;border-radius:50%;background:${bgColor};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">${initial}</span>
-                                <span style="font-weight:600;">${escHtml(w.name)}</span>
-                            </div>
-                            <button class="btn-icon-danger" data-delete-worker="${w.id}" title="حذف">
-                                ${icons.trash}
-                            </button>
-                        </div>
-                    `;
+                const container = document.getElementById('workersList'); if(!container) return;
+                if(state.workers.length===0){ container.innerHTML='<p class="text-secondary text-center">لا يوجد عمال</p>'; return; }
+                const colors = ['#dbb960','#b8952f','#8b7a3a','#c9a84c','#a08030'];
+                container.innerHTML = state.workers.map((w,i) => {
+                    return `<div class="list-item"><div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;"><span style="width:28px;height:28px;border-radius:50%;background:${colors[i%colors.length]};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">${w.name.charAt(0)}</span><span style="font-weight:600;">${escHtml(w.name)}</span></div><button class="btn-icon-danger" data-delete-worker="${w.id}">${icons.trash}</button></div>`;
                 }).join('');
-                container.querySelectorAll('[data-delete-worker]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const wid = this.getAttribute('data-delete-worker');
-                        if (state.workers.length <= 1) {
-                            showToast('لا يمكن حذف آخر عامل', 'warning');
-                            return;
-                        }
-                        const worker = state.workers.find(w => w.id === wid);
-                        showModal('تأكيد الحذف', `هل أنت متأكد من حذف العامل "<strong>${escHtml(worker?worker.name:'')}</strong>"؟`, [
-                            { key: 'cancel', label: 'إلغاء', close: true },
-                            { key: 'delete', label: 'حذف', danger: true, callback: () => {
-                                state.workers = state.workers.filter(w => w.id !== wid);
-                                saveState();
-                                showToast('🗑️ تم حذف العامل');
-                                renderSettings(document.getElementById('appMain'));
-                            }},
-                        ]);
-                    });
-                });
+                container.querySelectorAll('[data-delete-worker]').forEach(btn => btn.addEventListener('click', function() {
+                    const wid = this.dataset.deleteWorker;
+                    if(state.workers.length<=1){ showToast('لا يمكن حذف آخر عامل','warning'); return; }
+                    const worker = state.workers.find(w=>w.id===wid);
+                    showModal('تأكيد الحذف', `هل أنت متأكد من حذف العامل "<strong>${escHtml(worker.name)}</strong>"؟`, [
+                        { key:'cancel', label:'إلغاء', close:true },
+                        { key:'delete', label:'حذف', danger:true, callback:()=>{ state.workers=state.workers.filter(w=>w.id!==wid); saveState(); showToast('🗑️ تم حذف العامل'); renderSettings(document.getElementById('appMain')); }}
+                    ]);
+                }));
             }
 
             function renderPasswordActions() {
-                const container = document.getElementById('passwordActions');
-                if (!container) return;
-                const hasPw = !!state.password;
+                const container = document.getElementById('passwordActions'); if(!container) return;
                 container.innerHTML = '';
-                if (hasPw) {
-                    const changeBtn = document.createElement('button');
-                    changeBtn.className = 'btn-secondary';
-                    changeBtn.textContent = 'تغيير كلمة المرور';
-                    changeBtn.addEventListener('click', () => { lockMode = 'change'; updateLockScreen(); });
-                    container.appendChild(changeBtn);
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'btn-danger';
-                    removeBtn.textContent = 'إزالة كلمة المرور';
-                    removeBtn.addEventListener('click', () => {
-                        showModal('تأكيد الإزالة', 'هل أنت متأكد من إزالة كلمة المرور؟ سيصبح التطبيق بدون حماية.', [
-                            { key: 'cancel', label: 'إلغاء', close: true },
-                            { key: 'remove', label: 'إزالة', danger: true, callback: () => {
-                                state.password = '';
-                                saveState();
-                                showToast('🔓 تمت إزالة كلمة المرور');
-                                renderSettings(document.getElementById('appMain'));
-                            }},
-                        ]);
-                    });
-                    container.appendChild(removeBtn);
+                if(state.password) {
+                    const changeBtn = document.createElement('button'); changeBtn.className='btn-secondary'; changeBtn.textContent='تغيير كلمة المرور'; changeBtn.onclick=()=>{ lockMode='change'; updateLockScreen(); }; container.appendChild(changeBtn);
+                    const removeBtn = document.createElement('button'); removeBtn.className='btn-danger'; removeBtn.textContent='إزالة كلمة المرور'; removeBtn.onclick=()=>{ showModal('تأكيد الإزالة','هل أنت متأكد من إزالة كلمة المرور؟',[{ key:'cancel',label:'إلغاء',close:true},{ key:'remove',label:'إزالة',danger:true,callback:()=>{ state.password=''; saveState(); showToast('🔓 تمت إزالة كلمة المرور'); renderSettings(document.getElementById('appMain')); }}])}; container.appendChild(removeBtn);
                 } else {
-                    const setBtn = document.createElement('button');
-                    setBtn.className = 'btn-primary';
-                    setBtn.textContent = 'تعيين كلمة مرور (اختياري)';
-                    setBtn.addEventListener('click', () => {
-                        // Set new password mode
-                        lockMode = 'set';
-                        updateLockScreen();
-                    });
-                    container.appendChild(setBtn);
+                    const setBtn = document.createElement('button'); setBtn.className='btn-primary'; setBtn.textContent='تعيين كلمة مرور (اختياري)'; setBtn.onclick=()=>{ lockMode='set'; updateLockScreen(); }; container.appendChild(setBtn);
                 }
             }
 
-            function escHtml(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // ==================== RENDER PRODUCTION ====================
+            // ========== PRODUCTION ==========
             function renderProduction(main) {
                 const today = getToday();
                 const todayRecords = state.records.filter(r => r.date === today);
-                const totalToday = todayRecords.reduce((sum, r) => sum + r.totalAmount, 0);
+                const totalToday = todayRecords.reduce((s,r) => s + r.totalAmount, 0);
                 main.innerHTML = `
                     <div class="app-card">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.factory}</span>
-                            <span>تسجيل الإنتاج</span>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.factory}</span><span>تسجيل الإنتاج</span></div>
                         <p class="text-secondary mb-2">📅 ${formatDateArabic(today)}</p>
-                        <div class="field-group">
-                            <label class="field-label">اختيار البضاعة</label>
-                            <select class="field-input" id="prodGoodSelect">
-                                <option value="">-- اختر البضاعة --</option>
-                                ${state.goods.map(g => `<option value="${g.id}">${escHtml(g.name)} (${g.type})</option>`).join('')}
-                            </select>
-                        </div>
+                        <div class="field-group"><label class="field-label">اختيار البضاعة</label><select class="field-input" id="prodGoodSelect"><option value="">-- اختر البضاعة --</option>${state.goods.map(g=>`<option value="${g.id}">${escHtml(g.name)} (${g.type})</option>`).join('')}</select></div>
                         <div id="prodCalcPreview" style="display:none;"></div>
-                        <div class="field-group mt-2">
-                            <label class="field-label">الكمية (عدد القطع)</label>
-                            <input type="number" class="field-input" id="prodQuantity" placeholder="أدخل الكمية" min="1" step="1">
-                        </div>
+                        <div class="field-group mt-2"><label class="field-label">الكمية (عدد القطع)</label><input type="number" class="field-input" id="prodQuantity" placeholder="أدخل الكمية" min="1" step="1"></div>
                         <div id="prodTotalDisplay" style="display:none;"></div>
-                        <button class="btn-primary btn-primary-muted mt-2" id="recordProductionBtn">
-                            ${icons.plus} تسجيل العملية
-                        </button>
+                        <button class="btn-primary btn-primary-muted mt-2" id="recordProductionBtn">${icons.plus} تسجيل العملية</button>
                         <div id="prodSuccessBanner" style="display:none;"></div>
                     </div>
                     <div class="app-card" id="todayProductionCard" style="display:${todayRecords.length>0?'block':'none'};">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.document}</span>
-                            <span>إنتاج اليوم</span>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.document}</span><span>إنتاج اليوم</span></div>
                         <p class="text-secondary">إجمالي العمليات: <strong>${todayRecords.length}</strong> | المجموع: <strong>${formatPrice(totalToday)} $</strong></p>
                         <div id="todayRecordsList"></div>
                     </div>
                     <div class="app-card" id="endOfDayCard" style="display:${todayRecords.length>0?'block':'none'};">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.users}</span>
-                            <span>نهاية الدوام - توزيع الأجور</span>
-                        </div>
-                        <div class="field-group">
-                            <label class="field-label">الساعات الافتراضية</label>
-                            <div style="display:flex;gap:6px;align-items:center;">
-                                <input type="number" class="field-input worker-hours-input" id="eodDefaultHours" placeholder="${state.defaultHours}" min="0.5" max="24" step="0.5">
-                                <button class="btn-secondary" id="eodApplyAllBtn" style="font-size:11px;padding:7px 10px;">تطبيق على الكل</button>
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:6px;margin-bottom:8px;">
-                            <button class="btn-secondary" id="eodSelectAllBtn" style="font-size:11px;">${icons.selectAll} تحديد الكل</button>
-                            <button class="btn-secondary" id="eodDeselectAllBtn" style="font-size:11px;">إلغاء التحديد</button>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.users}</span><span>نهاية الدوام - توزيع الأجور</span></div>
+                        <div class="field-group"><label class="field-label">الساعات الافتراضية</label><div style="display:flex;gap:6px;align-items:center;"><input type="number" class="field-input worker-hours-input" id="eodDefaultHours" placeholder="${state.defaultHours}" min="0.5" max="24" step="0.5"><button class="btn-secondary" id="eodApplyAllBtn" style="font-size:11px;padding:7px 10px;">تطبيق على الكل</button></div></div>
+                        <div style="display:flex;gap:6px;margin-bottom:8px;"><button class="btn-secondary" id="eodSelectAllBtn" style="font-size:11px;">${icons.selectAll} تحديد الكل</button><button class="btn-secondary" id="eodDeselectAllBtn" style="font-size:11px;">إلغاء التحديد</button></div>
                         <div id="eodWorkerChips" class="flex-wrap" style="display:flex;gap:4px;margin-bottom:8px;"></div>
                         <div id="eodWorkerHours" class="hours-section" style="display:none;"></div>
                         <div class="text-secondary mt-2">إجمالي الساعات: <strong id="eodTotalHours">0</strong></div>
-                        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-                            <button class="btn-primary" id="eodDistributeBtn">💰 توزيع الأجور</button>
-                            <button class="btn-secondary" id="eodResetBtn">${icons.reset} تصفير</button>
-                        </div>
+                        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;"><button class="btn-primary" id="eodDistributeBtn">💰 توزيع الأجور</button><button class="btn-secondary" id="eodResetBtn">${icons.reset} تصفير</button></div>
                     </div>
                 `;
 
@@ -1493,74 +1206,32 @@
                 const prodCalcPreview = document.getElementById('prodCalcPreview');
                 const prodTotalDisplay = document.getElementById('prodTotalDisplay');
                 const recordProductionBtn = document.getElementById('recordProductionBtn');
-                const prodSuccessBanner = document.getElementById('prodSuccessBanner');
 
                 function updateProdPreview() {
                     const gid = prodGoodSelect.value;
                     const qty = parseInt(prodQuantity.value) || 0;
-                    if (!gid || qty < 1) {
-                        prodCalcPreview.style.display = 'none';
-                        prodTotalDisplay.style.display = 'none';
-                        recordProductionBtn.classList.add('btn-primary-muted');
-                        return;
-                    }
+                    if (!gid || qty < 1) { prodCalcPreview.style.display='none'; prodTotalDisplay.style.display='none'; recordProductionBtn.classList.add('btn-primary-muted'); return; }
                     const good = state.goods.find(g => g.id === gid);
-                    if (!good) return;
-                    const lm = good.length / 100, wm = good.width / 100, hm = good.height / 100;
-                    let dimsHTML = '';
-                    if (good.type === 'مساحة') dimsHTML = `<span class="calc-label">الأبعاد:</span> ${good.length}×${good.width} سم → <span class="calc-value">${lm}م × ${wm}م</span><br>`;
-                    if (good.type === 'حجم') dimsHTML = `<span class="calc-label">الأبعاد:</span> ${good.length}×${good.width}×${good.height} سم → <span class="calc-value">${lm}م × ${wm}م × ${hm}م</span><br>`;
-                    prodCalcPreview.style.display = 'block';
-                    prodCalcPreview.innerHTML = `
-                        <div class="calc-preview">
-                            ${dimsHTML}
-                            <span class="calc-label">المعادلة:</span> ${getCalcDescription(good, qty)}
-                        </div>
-                    `;
                     const total = calculateTotal(good, qty);
-                    prodTotalDisplay.style.display = 'block';
-                    prodTotalDisplay.innerHTML = `
-                        <div class="total-display">
-                            <div class="total-label">الإجمالي</div>
-                            <div class="total-amount">${formatPrice(total)} $</div>
-                        </div>
-                    `;
+                    prodCalcPreview.style.display='block';
+                    prodCalcPreview.innerHTML = `<div class="calc-preview">${good.type!=='قطعة'?`<span class="calc-label">الأبعاد:</span> ${good.length}×${good.width}${good.type==='حجم'?'×'+good.height:''} سم → <span class="calc-value">${(good.length/100).toFixed(2)}م × ${(good.width/100).toFixed(2)}م${good.type==='حجم'?' × '+(good.height/100).toFixed(2)+'م':''}</span><br>`:''}<span class="calc-label">المعادلة:</span> ${getCalcDescription(good, qty)}</div>`;
+                    prodTotalDisplay.style.display='block';
+                    prodTotalDisplay.innerHTML = `<div class="total-display"><div class="total-label">الإجمالي</div><div class="total-amount">${formatPrice(total)} $</div></div>`;
                     recordProductionBtn.classList.remove('btn-primary-muted');
                 }
-
                 prodGoodSelect.addEventListener('change', updateProdPreview);
                 prodQuantity.addEventListener('input', updateProdPreview);
-                updateProdPreview();
 
-                recordProductionBtn.addEventListener('click', function() {
-                    if (recordProductionBtn.classList.contains('btn-primary-muted')) return;
-                    const gid = prodGoodSelect.value;
-                    const qty = parseInt(prodQuantity.value) || 0;
-                    const good = state.goods.find(g => g.id === gid);
-                    if (!good || qty < 1) return;
-                    const totalAmount = calculateTotal(good, qty);
-                    const record = {
-                        id: generateId(),
-                        date: getToday(),
-                        goodId: good.id,
-                        goodName: good.name,
-                        goodType: good.type,
-                        quantity: qty,
-                        totalAmount: totalAmount,
-                        workerIds: [],
-                        workerNames: [],
-                        workerHours: [],
-                        workerWages: [],
-                        workerShare: [],
-                    };
-                    state.records.push(record);
-                    saveState();
-                    prodSuccessBanner.style.display = 'block';
-                    prodSuccessBanner.innerHTML = `<div class="success-banner">${icons.checkCircle} تم تسجيل العملية بنجاح! ${formatUnitQuantity(good.type,good.length,good.width,good.height,qty)} - ${formatPrice(totalAmount)} $</div>`;
-                    setTimeout(() => { prodSuccessBanner.style.display = 'none'; }, 4000);
-                    prodQuantity.value = '';
-                    updateProdPreview();
-                    renderProduction(main);
+                recordProductionBtn.addEventListener('click', () => {
+                    if(recordProductionBtn.classList.contains('btn-primary-muted')) return;
+                    const gid = prodGoodSelect.value; const qty = parseInt(prodQuantity.value)||0;
+                    const good = state.goods.find(g=>g.id===gid);
+                    const record = { id: generateId(), date: today, goodId: good.id, goodName: good.name, goodType: good.type, quantity: qty, totalAmount: calculateTotal(good, qty), workerIds:[], workerNames:[], workerHours:[], workerWages:[], workerShare:[] };
+                    state.records.push(record); saveState();
+                    document.getElementById('prodSuccessBanner').style.display='block';
+                    document.getElementById('prodSuccessBanner').innerHTML = `<div class="success-banner">${icons.checkCircle} تم تسجيل العملية بنجاح! ${formatUnitQuantity(good.type,good.length,good.width,good.height,qty)} - ${formatPrice(record.totalAmount)} $</div>`;
+                    setTimeout(()=>{ document.getElementById('prodSuccessBanner').style.display='none'; }, 4000);
+                    prodQuantity.value = ''; updateProdPreview(); renderProduction(main);
                 });
 
                 renderTodayRecords(todayRecords, main);
@@ -1568,46 +1239,20 @@
             }
 
             function renderTodayRecords(todayRecords, main) {
-                const container = document.getElementById('todayRecordsList');
-                if (!container) return;
-                if (todayRecords.length === 0) {
-                    container.innerHTML = '<p class="text-secondary text-center">لا توجد سجلات لليوم</p>';
-                    return;
-                }
+                const container = document.getElementById('todayRecordsList'); if(!container) return;
+                if(todayRecords.length===0){ container.innerHTML='<p class="text-secondary text-center">لا توجد سجلات لليوم</p>'; return; }
                 container.innerHTML = todayRecords.map(r => {
-                    const good = state.goods.find(g => g.id === r.goodId) || { type: r.goodType, length: 0, width: 0, height: 0 };
-                    return `
-                        <div class="record-item">
-                            <div style="flex:1;min-width:0;">
-                                <strong>${escHtml(r.goodName)}</strong>
-                                <span class="text-secondary"> | ${formatUnitQuantity(r.goodType,good.length,good.width,good.height,r.quantity)}</span>
-                                <span style="color:var(--gold-dark);font-weight:600;"> | ${formatPrice(r.totalAmount)} $</span>
-                            </div>
-                            <button class="btn-icon-danger" data-delete-record="${r.id}" title="حذف">
-                                ${icons.trash}
-                            </button>
-                        </div>
-                    `;
+                    const good = state.goods.find(g=>g.id===r.goodId) || { type: r.goodType, length:0, width:0, height:0 };
+                    return `<div class="record-item"><div style="flex:1;min-width:0;"><strong>${escHtml(r.goodName)}</strong><span class="text-secondary"> | ${formatUnitQuantity(r.goodType,good.length,good.width,good.height,r.quantity)}</span><span style="color:var(--gold-dark);font-weight:600;"> | ${formatPrice(r.totalAmount)} $</span></div><button class="btn-icon-danger" data-delete-record="${r.id}">${icons.trash}</button></div>`;
                 }).join('');
-                container.querySelectorAll('[data-delete-record]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const rid = this.getAttribute('data-delete-record');
-                        const record = state.records.find(r => r.id === rid);
-                        if (!record) return;
-                        showModal('تأكيد حذف العملية',
-                            `هل أنت متأكد من حذف العملية "<strong>${escHtml(record.goodName)}</strong>" بقيمة ${formatPrice(record.totalAmount)} $ ؟`,
-                            [
-                                { key: 'cancel', label: 'إلغاء', close: true },
-                                { key: 'delete', label: 'حذف', danger: true, callback: () => {
-                                    state.records = state.records.filter(r => r.id !== rid);
-                                    saveState();
-                                    showToast('🗑️ تم حذف السجل');
-                                    renderProduction(main);
-                                }},
-                            ]
-                        );
-                    });
-                });
+                container.querySelectorAll('[data-delete-record]').forEach(btn => btn.addEventListener('click', function() {
+                    const rid = this.dataset.deleteRecord;
+                    const record = state.records.find(r=>r.id===rid);
+                    showModal('تأكيد حذف العملية', `هل أنت متأكد من حذف العملية "<strong>${escHtml(record.goodName)}</strong>" بقيمة ${formatPrice(record.totalAmount)} $ ؟`, [
+                        { key:'cancel', label:'إلغاء', close:true },
+                        { key:'delete', label:'حذف', danger:true, callback:()=>{ state.records=state.records.filter(r=>r.id!==rid); saveState(); showToast('🗑️ تم حذف السجل'); renderProduction(main); }}
+                    ]);
+                }));
             }
 
             function renderEndOfDay(todayRecords, main) {
@@ -1615,194 +1260,129 @@
                 const hoursContainer = document.getElementById('eodWorkerHours');
                 const totalHoursEl = document.getElementById('eodTotalHours');
                 const defaultHoursInput = document.getElementById('eodDefaultHours');
-                if (!chipsContainer || !hoursContainer) return;
+                if(!chipsContainer||!hoursContainer) return;
 
-                if (!main._eodSelectedWorkers) main._eodSelectedWorkers = {};
-                if (!main._eodWorkerHours) main._eodWorkerHours = {};
-
+                if(!main._eodSelectedWorkers) main._eodSelectedWorkers = {};
+                if(!main._eodWorkerHours) main._eodWorkerHours = {};
                 const selWorkers = main._eodSelectedWorkers;
                 const workerHours = main._eodWorkerHours;
 
-                if (Object.keys(selWorkers).length === 0 && state.workers.length > 0) {
-                    state.workers.forEach(w => {
-                        selWorkers[w.id] = true;
-                        workerHours[w.id] = '';
-                    });
+                if(Object.keys(selWorkers).length===0 && state.workers.length>0) {
+                    state.workers.forEach(w => { selWorkers[w.id]=true; workerHours[w.id]=''; });
                 }
 
                 function updateEODUI() {
-                    chipsContainer.innerHTML = state.workers.map(w => {
-                        const active = selWorkers[w.id];
-                        return `
-                            <span class="worker-chip ${active?'worker-chip-active':''}" data-wid="${w.id}">
-                                <span class="chip-check">${active?'✓':''}</span>
-                                ${escHtml(w.name)}
-                            </span>
-                        `;
-                    }).join('');
-                    const selectedIds = state.workers.filter(w => selWorkers[w.id]).map(w => w.id);
-                    if (selectedIds.length > 0) {
-                        hoursContainer.style.display = 'block';
-                        hoursContainer.innerHTML = state.workers.filter(w => selWorkers[w.id]).map(w => {
-                            const hrs = workerHours[w.id] || '';
+                    chipsContainer.innerHTML = state.workers.map(w => `<span class="worker-chip ${selWorkers[w.id]?'worker-chip-active':''}" data-wid="${w.id}"><span class="chip-check">${selWorkers[w.id]?'✓':''}</span>${escHtml(w.name)}</span>`).join('');
+                    const selectedIds = state.workers.filter(w=>selWorkers[w.id]).map(w=>w.id);
+                    if(selectedIds.length>0) {
+                        hoursContainer.style.display='block';
+                        hoursContainer.innerHTML = state.workers.filter(w=>selWorkers[w.id]).map(w => {
+                            const hrs = workerHours[w.id]||'';
                             const wagePreview = hrs ? calculateWorkerWagePreview(w.id, parseFloat(hrs), todayRecords) : 0;
-                            return `
-                                <div class="list-item">
-                                    <span style="font-weight:600;">${escHtml(w.name)}</span>
-                                    <input type="number" class="worker-hours-input" data-wid="${w.id}" value="${hrs}" placeholder="${state.defaultHours}" min="0.1" max="24" step="0.1">
-                                    <span class="text-secondary" style="font-size:11px;">الأجر المتوقع: <strong>${formatPrice(wagePreview)} $</strong></span>
-                                </div>
-                            `;
+                            return `<div class="list-item"><span style="font-weight:600;">${escHtml(w.name)}</span><input type="number" class="worker-hours-input" data-wid="${w.id}" value="${hrs}" placeholder="${state.defaultHours}" min="0.1" max="24" step="0.1"><span class="text-secondary" style="font-size:11px;">الأجر المتوقع: <strong>${formatPrice(wagePreview)} $</strong></span></div>`;
                         }).join('');
-                    } else {
-                        hoursContainer.style.display = 'none';
-                    }
-                    const totalHrs = selectedIds.reduce((sum, wid) => sum + (parseFloat(workerHours[wid]) || 0), 0);
-                    totalHoursEl.textContent = totalHrs.toFixed(1) || '0.0';
+                    } else { hoursContainer.style.display='none'; }
+                    totalHoursEl.textContent = selectedIds.reduce((sum,wid)=>sum+(parseFloat(workerHours[wid])||0),0).toFixed(1)||'0.0';
                 }
 
                 function calculateWorkerWagePreview(wid, hrs, records) {
-                    const allSelectedIds = state.workers.filter(w => selWorkers[w.id]).map(w => w.id);
-                    const totalHrs = allSelectedIds.reduce((sum, id) => sum + (parseFloat(workerHours[id]) || 0), 0);
-                    if (totalHrs <= 0 || !allSelectedIds.includes(wid) || !hrs) return 0;
-                    const totalAmount = records.reduce((sum, r) => sum + r.totalAmount, 0);
-                    return (hrs / totalHrs) * totalAmount;
+                    const allIds = state.workers.filter(w=>selWorkers[w.id]).map(w=>w.id);
+                    const totalHrs = allIds.reduce((sum,id)=>sum+(parseFloat(workerHours[id])||0),0);
+                    if(totalHrs<=0||!allIds.includes(wid)||!hrs) return 0;
+                    return (hrs/totalHrs)*records.reduce((s,r)=>s+r.totalAmount,0);
                 }
 
                 updateEODUI();
 
-                chipsContainer.addEventListener('click', function(e) {
-                    const chip = e.target.closest('.worker-chip');
-                    if (!chip) return;
-                    const wid = chip.getAttribute('data-wid');
-                    selWorkers[wid] = !selWorkers[wid];
-                    if (!selWorkers[wid]) delete selWorkers[wid];
-                    if (!(wid in workerHours)) workerHours[wid] = '';
+                chipsContainer.addEventListener('click', e => {
+                    const chip = e.target.closest('.worker-chip'); if(!chip) return;
+                    const wid = chip.dataset.wid; selWorkers[wid]=!selWorkers[wid];
+                    if(!selWorkers[wid]) delete selWorkers[wid];
+                    if(!(wid in workerHours)) workerHours[wid]='';
                     updateEODUI();
                 });
 
-                hoursContainer.addEventListener('input', function(e) {
-                    if (e.target.classList.contains('worker-hours-input')) {
-                        const wid = e.target.getAttribute('data-wid');
-                        const v = parseFloat(e.target.value) || 0;
-                        workerHours[wid] = v > 0 ? v : '';
-                        updateEODUI();
+                hoursContainer.addEventListener('input', e => {
+                    if(e.target.classList.contains('worker-hours-input')) {
+                        const wid = e.target.dataset.wid; const v = parseFloat(e.target.value)||0;
+                        workerHours[wid] = v>0 ? v : ''; updateEODUI();
                     }
                 });
 
-                document.getElementById('eodApplyAllBtn').addEventListener('click', function() {
-                    const dv = parseFloat(defaultHoursInput.value) || state.defaultHours;
-                    if (!dv || dv <= 0) {
-                        showToast('الرجاء إدخال قيمة صحيحة للساعات', 'warning');
-                        return;
-                    }
-                    Object.keys(selWorkers).forEach(wid => { workerHours[wid] = dv; });
-                    state.defaultHours = dv;
-                    saveState();
-                    updateEODUI();
-                    showToast('تم تطبيق الساعات على الجميع');
+                document.getElementById('eodApplyAllBtn').addEventListener('click', ()=>{
+                    const dv = parseFloat(defaultHoursInput.value)||state.defaultHours;
+                    if(!dv||dv<=0){ showToast('الرجاء إدخال قيمة صحيحة للساعات','warning'); return; }
+                    Object.keys(selWorkers).forEach(wid=>{ workerHours[wid]=dv; });
+                    state.defaultHours=dv; saveState(); updateEODUI(); showToast('تم تطبيق الساعات على الجميع');
                 });
 
-                document.getElementById('eodSelectAllBtn').addEventListener('click', function() {
-                    state.workers.forEach(w => {
-                        selWorkers[w.id] = true;
-                        if (!(w.id in workerHours)) workerHours[w.id] = '';
-                    });
+                document.getElementById('eodSelectAllBtn').addEventListener('click', ()=>{
+                    state.workers.forEach(w=>{ selWorkers[w.id]=true; if(!(w.id in workerHours)) workerHours[w.id]=''; });
                     updateEODUI();
                 });
 
-                document.getElementById('eodDeselectAllBtn').addEventListener('click', function() {
-                    Object.keys(selWorkers).forEach(k => delete selWorkers[k]);
-                    updateEODUI();
+                document.getElementById('eodDeselectAllBtn').addEventListener('click', ()=>{
+                    Object.keys(selWorkers).forEach(k=>delete selWorkers[k]); updateEODUI();
                 });
 
-                document.getElementById('eodDistributeBtn').addEventListener('click', function() {
-                    const selectedIds = state.workers.filter(w => selWorkers[w.id]).map(w => w.id);
-                    if (selectedIds.length === 0) { showToast('الرجاء اختيار عامل واحد على الأقل', 'warning'); return; }
-                    const totalHrs = selectedIds.reduce((sum, wid) => sum + (parseFloat(workerHours[wid]) || 0), 0);
-                    if (totalHrs <= 0) { showToast('إجمالي الساعات يجب أن يكون أكبر من صفر', 'warning'); return; }
+                document.getElementById('eodDistributeBtn').addEventListener('click', ()=>{
+                    const selectedIds = state.workers.filter(w=>selWorkers[w.id]).map(w=>w.id);
+                    if(selectedIds.length===0){ showToast('الرجاء اختيار عامل واحد على الأقل','warning'); return; }
+                    const totalHrs = selectedIds.reduce((sum,wid)=>sum+(parseFloat(workerHours[wid])||0),0);
+                    if(totalHrs<=0){ showToast('إجمالي الساعات يجب أن يكون أكبر من صفر','warning'); return; }
                     const today = getToday();
-                    const todayRecs = state.records.filter(r => r.date === today);
-                    if (todayRecs.length === 0) { showToast('لا توجد سجلات لليوم', 'warning'); return; }
+                    const todayRecs = state.records.filter(r=>r.date===today);
+                    if(todayRecs.length===0){ showToast('لا توجد سجلات لليوم','warning'); return; }
+                    const dayTotal = todayRecs.reduce((sum,r)=>sum+r.totalAmount,0);
                     todayRecs.forEach(r => {
                         r.workerIds = [...selectedIds];
-                        r.workerNames = selectedIds.map(wid => {
-                            const w = state.workers.find(wk => wk.id === wid);
-                            return w ? w.name : '';
+                        r.workerNames = selectedIds.map(wid => { const w=state.workers.find(wk=>wk.id===wid); return w?w.name:''; });
+                        // Allocate hours proportionally to record value
+                        r.workerHours = selectedIds.map(wid => {
+                            const hrs = parseFloat(workerHours[wid])||0;
+                            return (hrs * (r.totalAmount / dayTotal));
                         });
-                        r.workerHours = selectedIds.map(wid => parseFloat(workerHours[wid]) || 0);
                         r.workerWages = selectedIds.map(wid => {
-                            const hrs = parseFloat(workerHours[wid]) || 0;
-                            return (hrs / totalHrs) * r.totalAmount;
+                            const hrs = parseFloat(workerHours[wid])||0;
+                            return (hrs/totalHrs)*r.totalAmount;
                         });
                         r.workerShare = selectedIds.map(wid => {
-                            const hrs = parseFloat(workerHours[wid]) || 0;
-                            return hrs / totalHrs;
+                            const hrs = parseFloat(workerHours[wid])||0;
+                            return hrs/totalHrs;
                         });
                     });
-                    saveState();
-                    showToast('✅ تم توزيع الأجور بنجاح على جميع سجلات اليوم');
-                    renderProduction(main);
+                    saveState(); showToast('✅ تم توزيع الأجور بنجاح'); renderProduction(main);
                 });
 
-                document.getElementById('eodResetBtn').addEventListener('click', function() {
-                    main._eodSelectedWorkers = {};
-                    main._eodWorkerHours = {};
-                    state.workers.forEach(w => {
-                        main._eodSelectedWorkers[w.id] = true;
-                        main._eodWorkerHours[w.id] = '';
-                    });
-                    updateEODUI();
-                    showToast('تمت إعادة التعيين');
+                document.getElementById('eodResetBtn').addEventListener('click', ()=>{
+                    main._eodSelectedWorkers = {}; main._eodWorkerHours = {};
+                    state.workers.forEach(w=>{ main._eodSelectedWorkers[w.id]=true; main._eodWorkerHours[w.id]=''; });
+                    updateEODUI(); showToast('تمت إعادة التعيين');
                 });
-
-                main._eodUpdateUI = updateEODUI;
             }
 
-            // ==================== RENDER REPORTS ====================
+            // ========== REPORTS ==========
             function renderReports(main) {
                 main.innerHTML = `
-                    <div class="report-tabs">
-                        <button class="report-tab ${reportSubTab==='invoices'?'active':''}" id="reportTabInvoices">📋 الفواتير</button>
-                        <button class="report-tab ${reportSubTab==='archive'?'active':''}" id="reportTabArchive">📦 الأرشيف</button>
-                    </div>
+                    <div class="report-tabs"><button class="report-tab ${reportSubTab==='invoices'?'active':''}" id="reportTabInvoices">📋 الفواتير</button><button class="report-tab ${reportSubTab==='archive'?'active':''}" id="reportTabArchive">📦 الأرشيف</button></div>
                     <div id="reportContent"></div>
                 `;
-                document.getElementById('reportTabInvoices').addEventListener('click', () => {
-                    reportSubTab = 'invoices';
-                    renderReports(main);
-                });
-                document.getElementById('reportTabArchive').addEventListener('click', () => {
-                    reportSubTab = 'archive';
-                    renderReports(main);
-                });
-                if (reportSubTab === 'invoices') renderInvoices(main);
-                else renderArchive(main);
+                document.getElementById('reportTabInvoices').addEventListener('click', ()=>{ reportSubTab='invoices'; renderReports(main); });
+                document.getElementById('reportTabArchive').addEventListener('click', ()=>{ reportSubTab='archive'; renderReports(main); });
+                if(reportSubTab==='invoices') renderInvoices(main); else renderArchive(main);
             }
 
             function renderInvoices(main) {
                 const content = document.getElementById('reportContent');
-                if (!content) return;
-
-                const allDates = state.records.map(r => r.date).sort();
-                let defaultStart = allDates.length ? allDates[0] : getToday();
-                let defaultEnd = getToday();
-
+                const allDates = state.records.map(r=>r.date).sort();
+                const defaultStart = allDates.length ? allDates[0] : getToday();
+                const defaultEnd = getToday();
                 content.innerHTML = `
                     <div class="app-card">
-                        <div class="section-header">
-                            <span class="section-icon-box">${icons.book}</span>
-                            <span>تحديد نطاق التاريخ للفاتورة</span>
-                        </div>
+                        <div class="section-header"><span class="section-icon-box">${icons.book}</span><span>تحديد نطاق التاريخ للفاتورة</span></div>
                         <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
-                            <div class="field-group" style="flex:1;min-width:120px;">
-                                <label class="field-label">من تاريخ</label>
-                                <input type="date" class="field-input" id="customStartDate" value="${defaultStart}">
-                            </div>
-                            <div class="field-group" style="flex:1;min-width:120px;">
-                                <label class="field-label">إلى تاريخ</label>
-                                <input type="date" class="field-input" id="customEndDate" value="${defaultEnd}">
-                            </div>
+                            <div class="field-group" style="flex:1;min-width:120px;"><label class="field-label">من تاريخ</label><input type="date" class="field-input" id="customStartDate" value="${defaultStart}"></div>
+                            <div class="field-group" style="flex:1;min-width:120px;"><label class="field-label">إلى تاريخ</label><input type="date" class="field-input" id="customEndDate" value="${defaultEnd}"></div>
                             <button class="btn-primary" id="applyCustomRangeBtn" style="width:auto;padding:10px 20px;">📅 عرض الفاتورة</button>
                             <button class="btn-secondary" id="showAllBtn" style="width:auto;padding:10px 16px;">عرض الكل</button>
                         </div>
@@ -1811,34 +1391,18 @@
                 `;
 
                 function buildInvoiceHTML(records, start, end) {
-                    if (records.length === 0) {
-                        return '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات في هذا النطاق</p></div>';
-                    }
-                    const totalAmount = records.reduce((s, r) => s + r.totalAmount, 0);
+                    if(records.length===0) return '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات في هذا النطاق</p></div>';
+                    const totalAmount = records.reduce((s,r)=>s+r.totalAmount,0);
                     const workerMap = {};
                     const dailyGoodsMap = {};
                     records.forEach(r => {
-                        if (!dailyGoodsMap[r.date]) dailyGoodsMap[r.date] = { goods: [], dayTotal: 0 };
-                        const good = state.goods.find(g => g.id === r.goodId) || { type: r.goodType, length: 0, width: 0, height: 0 };
-                        dailyGoodsMap[r.date].goods.push({
-                            goodName: r.goodName,
-                            goodType: r.goodType,
-                            quantity: r.quantity,
-                            totalAmount: r.totalAmount,
-                            length: good.length,
-                            width: good.width,
-                            height: good.height,
-                        });
+                        if(!dailyGoodsMap[r.date]) dailyGoodsMap[r.date] = { goods:[], dayTotal:0 };
+                        const good = state.goods.find(g=>g.id===r.goodId) || { type: r.goodType, length:0, width:0, height:0 };
+                        dailyGoodsMap[r.date].goods.push({ goodName: r.goodName, goodType: r.goodType, quantity: r.quantity, totalAmount: r.totalAmount, length: good.length, width: good.width, height: good.height });
                         dailyGoodsMap[r.date].dayTotal += r.totalAmount;
-                        if (r.workerIds && r.workerIds.length > 0) {
-                            r.workerIds.forEach((wid, i) => {
-                                const wname = r.workerNames[i] || '';
-                                if (!workerMap[wid]) workerMap[wid] = {
-                                    workerName: wname,
-                                    workDays: new Set(),
-                                    totalHours: 0,
-                                    totalWage: 0,
-                                };
+                        if(r.workerIds && r.workerIds.length>0) {
+                            r.workerIds.forEach((wid,i) => {
+                                if(!workerMap[wid]) workerMap[wid] = { workerName: r.workerNames[i]||'', workDays: new Set(), totalHours:0, totalWage:0 };
                                 workerMap[wid].workDays.add(r.date);
                                 workerMap[wid].totalHours += r.workerHours[i] || 0;
                                 workerMap[wid].totalWage += r.workerWages[i] || 0;
@@ -1846,285 +1410,111 @@
                         }
                     });
                     const workerRows = Object.values(workerMap).map(w => ({
-                        workerName: w.workerName,
-                        workDays: w.workDays.size,
-                        totalHours: w.totalHours,
-                        totalWage: w.totalWage,
+                        workerName: w.workerName, workDays: w.workDays.size, totalHours: w.totalHours, totalWage: w.totalWage
                     }));
                     const sortedDates = Object.keys(dailyGoodsMap).sort();
-                    const wk = start + '|' + end;
+                    const wk = start+'|'+end;
                     return `
-                        <div class="app-card" id="invoice-custom">
-                            <div class="section-header">
-                                <span class="section-icon-box">${icons.book}</span>
-                                <span>فاتورة مخصصة: ${formatDateArabic(start)} - ${formatDateArabic(end)}</span>
-                            </div>
-                            <p class="text-secondary">عدد العمليات: <strong>${records.length}</strong> | الإجمالي: <strong>${formatPrice(totalAmount)} $</strong> | العمال: <strong>${Object.keys(workerMap).length}</strong></p>
+                        <div class="app-card">
+                            <div class="section-header"><span class="section-icon-box">${icons.book}</span><span>فاتورة: ${formatDateArabic(start)} - ${formatDateArabic(end)}</span></div>
+                            <p class="text-secondary">عدد العمليات: <strong>${records.length}</strong> | الإجمالي: <strong>${formatPrice(totalAmount)} $</strong></p>
                             <table class="invoice-table">
-                                <thead>
-                                    <tr><th>العامل</th><th>أيام العمل</th><th>الساعات</th><th>الأجر</th></tr>
-                                </thead>
+                                <thead><tr><th>العامل</th><th>أيام العمل</th><th>الساعات</th><th>الأجر</th></tr></thead>
                                 <tbody>
-                                    ${workerRows.map(w=>`
-                                        <tr><td>${escHtml(w.workerName)}</td><td>${w.workDays}</td><td>${w.totalHours.toFixed(1)}</td><td>${formatPrice(w.totalWage)} $</td></tr>
-                                    `).join('')}
+                                    ${workerRows.map(w=>`<tr><td>${escHtml(w.workerName)}</td><td>${w.workDays}</td><td>${w.totalHours.toFixed(1)}</td><td>${formatPrice(w.totalWage)} $</td></tr>`).join('')}
                                     ${workerRows.length===0?'<tr><td colspan="4" class="text-secondary">لم يتم توزيع الأجور بعد</td></tr>':''}
                                 </tbody>
                             </table>
-                            <details class="mt-2" style="font-size:12px;">
-                                <summary style="cursor:pointer;font-weight:600;color:var(--gold-dark);">تفاصيل يومية</summary>
-                                <div style="margin-top:8px;">
-                                    ${sortedDates.map(d=>`
-                                        <div style="margin-bottom:6px;padding:6px;background:#fafaf7;border-radius:7px;">
-                                            <strong>${formatDateArabic(d)}</strong> - إجمالي اليوم: ${formatPrice(dailyGoodsMap[d].dayTotal)} $
-                                            <div style="font-size:11px;color:#666;">
-                                                ${dailyGoodsMap[d].goods.map(g=>`${escHtml(g.goodName)} (${g.goodType}) - ${formatUnitQuantity(g.goodType,g.length,g.width,g.height,g.quantity)} - ${formatPrice(g.totalAmount)} $`).join('<br>')}
-                                            </div>
-                                        </div>
-                                    `).join('')}
-                                </div>
+                            <details class="mt-2" style="font-size:12px;"><summary style="cursor:pointer;font-weight:600;color:var(--gold-dark);">تفاصيل يومية</summary>
+                                <div style="margin-top:8px;">${sortedDates.map(d=>`<div style="margin-bottom:6px;padding:6px;background:#fafaf7;border-radius:7px;"><strong>${formatDateArabic(d)}</strong> - ${formatPrice(dailyGoodsMap[d].dayTotal)} $<div style="font-size:11px;color:#666;">${dailyGoodsMap[d].goods.map(g=>`${escHtml(g.goodName)} (${g.goodType}) - ${formatUnitQuantity(g.goodType,g.length,g.width,g.height,g.quantity)} - ${formatPrice(g.totalAmount)} $`).join('<br>')}</div></div>`).join('')}</div>
                             </details>
                             <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;" class="no-print">
-                                <button class="btn-primary" data-archive-range="${wk}" style="width:auto;padding:9px 14px;font-size:12px;">
-                                    ${icons.archive} أرشفة هذه الفاتورة
-                                </button>
-                                <button class="btn-secondary" data-print-range="${wk}" style="width:auto;padding:9px 14px;font-size:12px;">
-                                    ${icons.printer} طباعة
-                                </button>
+                                <button class="btn-primary" data-archive-range="${wk}" style="width:auto;padding:9px 14px;font-size:12px;">${icons.archive} أرشفة</button>
+                                <button class="btn-secondary" data-print-range="${wk}" style="width:auto;padding:9px 14px;font-size:12px;">${icons.printer} طباعة</button>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }
 
-                document.getElementById('applyCustomRangeBtn').addEventListener('click', function() {
-                    const start = document.getElementById('customStartDate').value;
-                    const end = document.getElementById('customEndDate').value;
-                    if (!start || !end) { showToast('الرجاء اختيار تاريخ البداية والنهاية', 'warning'); return; }
-                    if (start > end) { showToast('تاريخ البداية يجب أن يكون قبل تاريخ النهاية', 'warning'); return; }
-                    const filtered = state.records.filter(r => r.date >= start && r.date <= end);
+                document.getElementById('applyCustomRangeBtn').addEventListener('click', ()=>{
+                    const start = document.getElementById('customStartDate').value, end = document.getElementById('customEndDate').value;
+                    if(!start||!end||start>end) return showToast('تاريخ غير صحيح','warning');
+                    const filtered = state.records.filter(r=>r.date>=start&&r.date<=end);
                     document.getElementById('customInvoiceContainer').innerHTML = buildInvoiceHTML(filtered, start, end);
                 });
 
-                document.getElementById('showAllBtn').addEventListener('click', function() {
-                    if (state.records.length === 0) {
-                        document.getElementById('customInvoiceContainer').innerHTML = '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات لعرضها</p></div>';
-                        return;
-                    }
-                    const start = state.records.reduce((min, r) => r.date < min ? r.date : min, state.records[0].date);
-                    const end = state.records.reduce((max, r) => r.date > max ? r.date : max, state.records[0].date);
+                document.getElementById('showAllBtn').addEventListener('click', ()=>{
+                    if(state.records.length===0) { document.getElementById('customInvoiceContainer').innerHTML='<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات</p></div>'; return; }
+                    const start = state.records.reduce((min,r)=>r.date<min?r.date:min, state.records[0].date);
+                    const end = state.records.reduce((max,r)=>r.date>max?r.date:max, state.records[0].date);
                     document.getElementById('customInvoiceContainer').innerHTML = buildInvoiceHTML(state.records, start, end);
                 });
 
-                // Initial load: show all
-                if (state.records.length > 0) {
-                    const start = state.records.reduce((min, r) => r.date < min ? r.date : min, state.records[0].date);
-                    const end = state.records.reduce((max, r) => r.date > max ? r.date : max, state.records[0].date);
+                if(state.records.length>0) {
+                    const start = state.records.reduce((min,r)=>r.date<min?r.date:min, state.records[0].date);
+                    const end = state.records.reduce((max,r)=>r.date>max?r.date:max, state.records[0].date);
                     document.getElementById('customInvoiceContainer').innerHTML = buildInvoiceHTML(state.records, start, end);
-                } else {
-                    document.getElementById('customInvoiceContainer').innerHTML = '<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات لعرضها</p></div>';
-                }
+                } else document.getElementById('customInvoiceContainer').innerHTML='<div class="app-card"><p class="text-secondary text-center">لا توجد سجلات</p></div>';
 
-                document.getElementById('customInvoiceContainer').addEventListener('click', function(e) {
-                    if (e.target.closest('[data-archive-range]')) {
-                        const wk = e.target.closest('[data-archive-range]').getAttribute('data-archive-range');
-                        const [start, end] = wk.split('|');
-                        archiveCustomRange(start, end, main);
-                    }
-                    if (e.target.closest('[data-print-range]')) {
-                        window.print();
-                    }
+                document.getElementById('customInvoiceContainer').addEventListener('click', e => {
+                    if(e.target.closest('[data-archive-range]')) { const [start,end]=e.target.closest('[data-archive-range]').dataset.archiveRange.split('|'); archiveCustomRange(start,end,main); }
+                    if(e.target.closest('[data-print-range]')) window.print();
                 });
             }
 
             function archiveCustomRange(start, end, main) {
-                const records = state.records.filter(r => r.date >= start && r.date <= end);
-                if (records.length === 0) return;
+                const records = state.records.filter(r=>r.date>=start&&r.date<=end);
+                if(records.length===0) return;
                 const overlay = document.getElementById('modalOverlay');
                 const card = document.getElementById('modalCard');
-                card.innerHTML = `
-                    <div class="modal-title">أرشفة الفاتورة</div>
-                    <div class="modal-body">
-                        <p>أدخل اسمًا للفاتورة المؤرشفة:</p>
-                        <input type="text" class="field-input" id="archiveLabelInput" value="فاتورة ${formatDateArabic(start)} - ${formatDateArabic(end)}" style="margin-top:8px;">
-                    </div>
-                    <div class="modal-actions">
-                        <button class="modal-btn-primary" id="archiveConfirmBtn">أرشفة</button>
-                        <button id="archiveCancelBtn">إلغاء</button>
-                    </div>
-                `;
-                overlay.style.display = 'flex';
-                document.getElementById('archiveCancelBtn').addEventListener('click', () => { overlay.style.display = 'none'; });
-                document.getElementById('archiveConfirmBtn').addEventListener('click', () => {
-                    const label = document.getElementById('archiveLabelInput').value.trim() || 'فاتورة ' + formatDateArabic(start);
-                    const workerMap = {};
-                    const dailyGoodsMap = {};
-                    records.forEach(r => {
-                        if (!dailyGoodsMap[r.date]) dailyGoodsMap[r.date] = { goods: [], dayTotal: 0 };
-                        const good = state.goods.find(g => g.id === r.goodId) || { type: r.goodType, length: 0, width: 0, height: 0 };
-                        dailyGoodsMap[r.date].goods.push({
-                            goodName: r.goodName,
-                            goodType: r.goodType,
-                            quantity: r.quantity,
-                            totalAmount: r.totalAmount,
-                            length: good.length,
-                            width: good.width,
-                            height: good.height,
-                        });
-                        dailyGoodsMap[r.date].dayTotal += r.totalAmount;
-                        if (r.workerIds) {
-                            r.workerIds.forEach((wid, i) => {
-                                if (!workerMap[wid]) workerMap[wid] = {
-                                    workerName: r.workerNames[i] || '',
-                                    workDays: new Set(),
-                                    totalHours: 0,
-                                    totalWage: 0,
-                                };
-                                workerMap[wid].workDays.add(r.date);
-                                workerMap[wid].totalHours += r.workerHours[i] || 0;
-                                workerMap[wid].totalWage += r.workerWages[i] || 0;
-                            });
-                        }
+                card.innerHTML = `<div class="modal-title">أرشفة الفاتورة</div><div class="modal-body"><p>أدخل اسمًا للفاتورة المؤرشفة:</p><input type="text" class="field-input" id="archiveLabelInput" value="فاتورة ${formatDateArabic(start)} - ${formatDateArabic(end)}" style="margin-top:8px;"></div><div class="modal-actions"><button class="modal-btn-primary" id="archiveConfirmBtn">أرشفة</button><button id="archiveCancelBtn">إلغاء</button></div>`;
+                overlay.style.display='flex';
+                document.getElementById('archiveCancelBtn').addEventListener('click', ()=> overlay.style.display='none');
+                document.getElementById('archiveConfirmBtn').addEventListener('click', ()=>{
+                    const label = document.getElementById('archiveLabelInput').value.trim() || 'فاتورة '+formatDateArabic(start);
+                    const workerMap={}, dailyGoodsMap={};
+                    records.forEach(r=>{
+                        if(!dailyGoodsMap[r.date]) dailyGoodsMap[r.date]={goods:[],dayTotal:0};
+                        const good=state.goods.find(g=>g.id===r.goodId)||{type:r.goodType,length:0,width:0,height:0};
+                        dailyGoodsMap[r.date].goods.push({goodName:r.goodName,goodType:r.goodType,quantity:r.quantity,totalAmount:r.totalAmount,length:good.length,width:good.width,height:good.height});
+                        dailyGoodsMap[r.date].dayTotal+=r.totalAmount;
+                        if(r.workerIds) r.workerIds.forEach((wid,i)=>{ if(!workerMap[wid]) workerMap[wid]={workerName:r.workerNames[i]||'',workDays:new Set(),totalHours:0,totalWage:0}; workerMap[wid].workDays.add(r.date); workerMap[wid].totalHours+=r.workerHours[i]||0; workerMap[wid].totalWage+=r.workerWages[i]||0; });
                     });
-                    const invoice = {
-                        id: generateId(),
-                        createdAt: new Date().toISOString(),
-                        label: label,
-                        dateRange: { start, end },
-                        items: Object.values(workerMap).map(w => ({
-                            workerName: w.workerName,
-                            workDays: w.workDays.size,
-                            totalHours: w.totalHours,
-                            totalWage: w.totalWage,
-                        })),
-                        dailyGoods: Object.keys(dailyGoodsMap).sort().map(d => ({
-                            date: d,
-                            goods: dailyGoodsMap[d].goods,
-                            dayTotal: dailyGoodsMap[d].dayTotal,
-                        })),
-                        totalAmount: records.reduce((s, r) => s + r.totalAmount, 0),
-                        recordsCount: records.length,
-                    };
-                    state.archivedInvoices.push(invoice);
-                    const recordIds = new Set(records.map(r => r.id));
-                    state.records = state.records.filter(r => !recordIds.has(r.id));
-                    saveState();
-                    overlay.style.display = 'none';
-                    showToast('📦 تمت أرشفة الفاتورة بنجاح');
-                    renderReports(main);
+                    state.archivedInvoices.push({
+                        id: generateId(), createdAt: new Date().toISOString(), label, dateRange:{start,end},
+                        items: Object.values(workerMap).map(w=>({workerName:w.workerName,workDays:w.workDays.size,totalHours:w.totalHours,totalWage:w.totalWage})),
+                        dailyGoods: Object.keys(dailyGoodsMap).sort().map(d=>({date:d,goods:dailyGoodsMap[d].goods,dayTotal:dailyGoodsMap[d].dayTotal})),
+                        totalAmount: records.reduce((s,r)=>s+r.totalAmount,0), recordsCount: records.length
+                    });
+                    const recordIds = new Set(records.map(r=>r.id));
+                    state.records = state.records.filter(r=>!recordIds.has(r.id));
+                    saveState(); overlay.style.display='none'; showToast('📦 تمت أرشفة الفاتورة'); renderReports(main);
                 });
-                overlay.onclick = function(e) { if (e.target === overlay) overlay.style.display = 'none'; };
+                overlay.onclick = e => { if(e.target===overlay) overlay.style.display='none'; };
             }
 
             function renderArchive(main) {
                 const content = document.getElementById('reportContent');
-                if (!content) return;
-                if (state.archivedInvoices.length === 0) {
-                    content.innerHTML = '<div class="app-card"><p class="text-secondary text-center">لا توجد فواتير مؤرشفة</p></div>';
-                    return;
-                }
+                if(state.archivedInvoices.length===0){ content.innerHTML='<div class="app-card"><p class="text-secondary text-center">لا توجد فواتير مؤرشفة</p></div>'; return; }
                 content.innerHTML = state.archivedInvoices.map(inv => {
-                    const isOpen = expandedArchives[inv.id] || false;
-                    return `
-                        <div class="archive-item">
-                            <div class="archive-header" data-toggle-archive="${inv.id}">
-                                <span>📦 <strong>${escHtml(inv.label)}</strong></span>
-                                <span class="text-secondary" style="font-size:11px;">${formatDateArabic(inv.dateRange.start)} - ${formatDateArabic(inv.dateRange.end)} | ${inv.recordsCount} عملية | ${formatPrice(inv.totalAmount)} $</span>
-                                <span>${icons.arrowDown}</span>
-                            </div>
-                            <div class="archive-details ${isOpen?'open':''}" id="archiveDetail-${inv.id}">
-                                <table class="invoice-table">
-                                    <thead><tr><th>العامل</th><th>أيام العمل</th><th>الساعات</th><th>الأجر</th></tr></thead>
-                                    <tbody>
-                                        ${inv.items.map(w=>`<tr><td>${escHtml(w.workerName)}</td><td>${w.workDays}</td><td>${w.totalHours.toFixed(1)}</td><td>${formatPrice(w.totalWage)} $</td></tr>`).join('')}
-                                    </tbody>
-                                </table>
-                                <details class="mt-2" style="font-size:12px;">
-                                    <summary style="cursor:pointer;font-weight:600;color:var(--gold-dark);">تفاصيل يومية</summary>
-                                    <div style="margin-top:6px;">
-                                        ${inv.dailyGoods.map(d=>`
-                                            <div style="margin-bottom:4px;padding:4px 6px;background:#fafaf7;border-radius:6px;">
-                                                <strong>${formatDateArabic(d.date)}</strong> - ${formatPrice(d.dayTotal)} $
-                                                <div style="font-size:11px;color:#666;">${d.goods.map(g=>`${escHtml(g.goodName)} (${g.goodType}) - ${formatUnitQuantity(g.goodType,g.length,g.width,g.height,g.quantity)} - ${formatPrice(g.totalAmount)} $`).join('<br>')}</div>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </details>
-                                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;" class="no-print">
-                                    <button class="btn-secondary" data-print-archive="${inv.id}" style="font-size:11px;">${icons.printer} طباعة</button>
-                                    <button class="btn-danger" data-delete-archive="${inv.id}" style="font-size:11px;">${icons.trash} حذف</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                    const isOpen = expandedArchives[inv.id]||false;
+                    return `<div class="archive-item"><div class="archive-header" data-toggle-archive="${inv.id}"><span>📦 <strong>${escHtml(inv.label)}</strong></span><span class="text-secondary" style="font-size:11px;">${formatDateArabic(inv.dateRange.start)} - ${formatDateArabic(inv.dateRange.end)} | ${inv.recordsCount} عملية | ${formatPrice(inv.totalAmount)} $</span><span>${icons.arrowDown}</span></div><div class="archive-details ${isOpen?'open':''}" id="archiveDetail-${inv.id}"><table class="invoice-table"><thead><tr><th>العامل</th><th>أيام العمل</th><th>الساعات</th><th>الأجر</th></tr></thead><tbody>${inv.items.map(w=>`<tr><td>${escHtml(w.workerName)}</td><td>${w.workDays}</td><td>${w.totalHours.toFixed(1)}</td><td>${formatPrice(w.totalWage)} $</td></tr>`).join('')}</tbody></table><details class="mt-2" style="font-size:12px;"><summary style="cursor:pointer;font-weight:600;color:var(--gold-dark);">تفاصيل يومية</summary><div style="margin-top:6px;">${inv.dailyGoods.map(d=>`<div style="margin-bottom:4px;padding:4px 6px;background:#fafaf7;border-radius:6px;"><strong>${formatDateArabic(d.date)}</strong> - ${formatPrice(d.dayTotal)} $<div style="font-size:11px;color:#666;">${d.goods.map(g=>`${escHtml(g.goodName)} (${g.goodType}) - ${formatUnitQuantity(g.goodType,g.length,g.width,g.height,g.quantity)} - ${formatPrice(g.totalAmount)} $`).join('<br>')}</div></div>`).join('')}</div></details><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;" class="no-print"><button class="btn-secondary" data-print-archive="${inv.id}" style="font-size:11px;">${icons.printer} طباعة</button><button class="btn-danger" data-delete-archive="${inv.id}" style="font-size:11px;">${icons.trash} حذف</button></div></div></div>`;
                 }).join('');
-
-                content.querySelectorAll('[data-toggle-archive]').forEach(header => {
-                    header.addEventListener('click', function() {
-                        const invId = this.getAttribute('data-toggle-archive');
-                        expandedArchives[invId] = !expandedArchives[invId];
-                        const detail = document.getElementById('archiveDetail-' + invId);
-                        if (detail) detail.classList.toggle('open', expandedArchives[invId]);
-                    });
-                });
-                content.querySelectorAll('[data-print-archive]').forEach(btn => {
-                    btn.addEventListener('click', () => window.print());
-                });
-                content.querySelectorAll('[data-delete-archive]').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const invId = this.getAttribute('data-delete-archive');
-                        const inv = state.archivedInvoices.find(i => i.id === invId);
-                        showModal('تأكيد الحذف', `هل أنت متأكد من حذف الفاتورة المؤرشفة "<strong>${escHtml(inv?inv.label:'')}</strong>"؟`, [
-                            { key: 'cancel', label: 'إلغاء', close: true },
-                            { key: 'delete', label: 'حذف', danger: true, callback: () => {
-                                state.archivedInvoices = state.archivedInvoices.filter(i => i.id !== invId);
-                                delete expandedArchives[invId];
-                                saveState();
-                                showToast('🗑️ تم حذف الفاتورة المؤرشفة');
-                                renderReports(main);
-                            }},
-                        ]);
-                    });
-                });
+                content.querySelectorAll('[data-toggle-archive]').forEach(h => h.addEventListener('click', function(){ const id=this.dataset.toggleArchive; expandedArchives[id]=!expandedArchives[id]; document.getElementById('archiveDetail-'+id).classList.toggle('open', expandedArchives[id]); }));
+                content.querySelectorAll('[data-print-archive]').forEach(b => b.addEventListener('click', ()=>window.print()));
+                content.querySelectorAll('[data-delete-archive]').forEach(b => b.addEventListener('click', function(){ const id=this.dataset.deleteArchive; const inv=state.archivedInvoices.find(i=>i.id===id); showModal('تأكيد الحذف',`هل أنت متأكد من حذف الفاتورة "<strong>${escHtml(inv.label)}</strong>"؟`,[{key:'cancel',label:'إلغاء',close:true},{key:'delete',label:'حذف',danger:true,callback:()=>{ state.archivedInvoices=state.archivedInvoices.filter(i=>i.id!==id); delete expandedArchives[id]; saveState(); showToast('🗑️ تم حذف الفاتورة'); renderReports(main); }}]); }));
             }
 
-            // ==================== INITIALIZATION ====================
+            // INIT
             function init() {
                 loadState();
-                document.querySelectorAll('.bottom-nav .nav-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        currentTab = this.getAttribute('data-tab');
-                        updateNavActive();
-                        renderContent();
-                    });
-                });
+                document.querySelectorAll('.bottom-nav .nav-btn').forEach(btn => btn.addEventListener('click', function(){ currentTab=this.dataset.tab; updateNavActive(); renderContent(); }));
                 document.getElementById('lockSubmitBtn').addEventListener('click', handleLockSubmit);
-                document.getElementById('lockPasswordInput').addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') handleLockSubmit();
-                });
-                document.getElementById('lockConfirmInput').addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') handleLockSubmit();
-                });
-                document.getElementById('lockToggleEyeBtn').addEventListener('click', function() {
-                    showPassword = !showPassword;
-                    document.getElementById('lockPasswordInput').type = showPassword ? 'text' : 'password';
-                    document.getElementById('lockConfirmInput').type = showPassword ? 'text' : 'password';
-                    this.innerHTML = (showPassword ? icons.eyeOff : icons.eye) + ' ' + (showPassword ? 'إخفاء' : 'إظهار');
-                });
-
-                // If password is set, show lock screen; otherwise go directly to app
-                if (state.password) {
-                    lockMode = 'enter';
-                    updateLockScreen();
-                } else {
-                    // No password - skip lock screen and show app directly
-                    document.getElementById('lockScreen').style.display = 'none';
-                    document.getElementById('appShell').style.display = 'flex';
-                    currentTab = 'production';
-                    updateNavActive();
-                    renderContent();
-                }
+                document.getElementById('lockPasswordInput').addEventListener('keydown', e => { if(e.key==='Enter') handleLockSubmit(); });
+                document.getElementById('lockConfirmInput').addEventListener('keydown', e => { if(e.key==='Enter') handleLockSubmit(); });
+                document.getElementById('lockToggleEyeBtn').addEventListener('click', ()=>{ showPassword=!showPassword; document.getElementById('lockPasswordInput').type=showPassword?'text':'password'; document.getElementById('lockConfirmInput').type=showPassword?'text':'password'; this.innerHTML=(showPassword?icons.eyeOff:icons.eye)+' '+(showPassword?'إخفاء':'إظهار'); });
+                if(state.password) { lockMode='enter'; updateLockScreen(); }
+                else { document.getElementById('lockScreen').style.display='none'; document.getElementById('appShell').style.display='flex'; currentTab='production'; updateNavActive(); renderContent(); }
             }
-
             init();
         })();
     </script>
